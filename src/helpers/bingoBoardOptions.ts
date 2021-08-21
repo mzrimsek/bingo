@@ -1,7 +1,7 @@
 import { BingoBoardOption } from 'models';
 import env from 'react-dotenv';
 
-export const getBingoBoardOptions: () => Array<BingoBoardOption> = () => {
+export const getBingoBoards: () => Array<BingoBoardOption> = () => {
   const urlKeys = Object.keys(env).filter(key => key.match(/GOOGLE_SHEET_URL_\d/g));
   const urls = urlKeys.map(key => env[key]);
 

@@ -1,24 +1,29 @@
-import './App.css';
-
 import {
   Box,
+  Card,
   CssBaseline,
   ThemeProvider,
   createTheme,
   makeStyles,
   useMediaQuery
 } from '@material-ui/core';
+import { getBingoBoards, sheetrockHandler } from './helpers';
 import { useMemo, useState } from 'react';
 
-import BingoBoardSelector from 'components/BingoBoardSelector/BingoBoardSelector';
-import { getBingoBoardOptions } from './helpers';
+import BingoBoard from 'components/BingoBoard';
+import BingoBoardSelector from 'components/BingoBoardSelector';
 
-function App() {
-  const useStyles = makeStyles(theme => ({
-    wrapper: {
-      padding: theme.spacing(2)
-    }
-  }));
+const useStyles = makeStyles(theme => ({
+  wrapper: {
+    padding: theme.spacing(2)
+  },
+  card: {
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2)
+  }
+}));
+
+function App(): JSX.Element {
   const classes = useStyles();
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -32,18 +37,41 @@ function App() {
     [prefersDarkMode]
   );
 
-  const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState('');
-  const bingoBoardOptions = getBingoBoardOptions();
+  const [selectedBingoBoard, setSelectedBingoBoard] = useState('');
+  const bingoBoards = getBingoBoards();
+
+  const [bingoBoardOptions, setBingoBoardOptions] = useState([]);
+
+  const updateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
+    setSelectedBingoBoard(nextSelectedBingoBoard);
+    sheetrockHandler(nextSelectedBingoBoard, (_error, _options, response) => {
+      if (response && response.rows) {
+        const { rows } = response;
+        const rowsMinusHeader = rows.filter(row => row.num > 1);
+        const boardOptions = rowsMinusHeader.flatMap(row => row.cellsArray);
+        setBingoBoardOptions(boardOptions);
+      }
+    });
+  };
+
+  const shouldRenderBingoBoard = bingoBoardOptions.length !== 0;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <Box className={classes.wrapper}>
-          <BingoBoardSelector
-            options={bingoBoardOptions}
-            currentSelection={selectedBingoBoardOption}
-            updateSelection={setSelectedBingoBoardOption}
-          />
+          <Card className={classes.card}>
+            <BingoBoardSelector
+              options={bingoBoards}
+              currentSelection={selectedBingoBoard}
+              updateSelection={updateSelectedBingoBoard}
+            />
+          </Card>
+          {shouldRenderBingoBoard && (
+            <Card className={classes.card}>
+              <BingoBoard boardOptions={bingoBoardOptions} />
+            </Card>
+          )}
         </Box>
       </CssBaseline>
     </ThemeProvider>
