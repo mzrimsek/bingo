@@ -1,22 +1,52 @@
 import './App.css';
 
-import BingoSelector from 'components/bingoSelector/BingoSelector';
+import {
+  Box,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  makeStyles,
+  useMediaQuery
+} from '@material-ui/core';
+import { useMemo, useState } from 'react';
+
+import BingoBoardSelector from 'components/BingoBoardSelector/BingoBoardSelector';
 import { getBingoBoardOptions } from './helpers';
-import { useState } from 'react';
 
 function App() {
-  const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState('');
+  const useStyles = makeStyles(theme => ({
+    wrapper: {
+      padding: theme.spacing(2)
+    }
+  }));
+  const classes = useStyles();
 
-  const options = getBingoBoardOptions();
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          type: prefersDarkMode ? 'dark' : 'light'
+        }
+      }),
+    [prefersDarkMode]
+  );
+
+  const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState('');
+  const bingoBoardOptions = getBingoBoardOptions();
 
   return (
-    <div className="App">
-      <BingoSelector
-        options={options}
-        currentSelection={selectedBingoBoardOption}
-        updateSelection={setSelectedBingoBoardOption}
-      />
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <Box className={classes.wrapper}>
+          <BingoBoardSelector
+            options={bingoBoardOptions}
+            currentSelection={selectedBingoBoardOption}
+            updateSelection={setSelectedBingoBoardOption}
+          />
+        </Box>
+      </CssBaseline>
+    </ThemeProvider>
   );
 }
 

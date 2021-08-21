@@ -8,11 +8,13 @@ export const getBingoBoardOptions: () => Array<BingoBoardOption> = () => {
   const labelKeys = Object.keys(env).filter(key => key.match(/GOOGLE_SHEET_LABEL_\d/g));
   const labels = labelKeys.map(key => env[key]);
 
-  return urls.map((url, index) => {
-    const label = labels[index];
-    return {
-      url,
-      label
-    };
-  }).filter(option => option.url !== '' && option.label !== '');
+  return urls
+    .map((url, index) => {
+      const label = labels[index];
+      return {
+        url,
+        label
+      };
+    })
+    .filter(option => option.url !== '' || option.label !== '');
 };
