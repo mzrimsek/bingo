@@ -1,9 +1,5 @@
+import { BingoBoardOption } from 'models';
 import env from 'react-dotenv';
-
-interface BingoBoardOption {
-  url: string;
-  label: string;
-}
 
 export const getBingoBoardOptions: () => Array<BingoBoardOption> = () => {
   const urlKeys = Object.keys(env).filter(key => key.match(/GOOGLE_SHEET_URL_\d/g));
@@ -18,5 +14,5 @@ export const getBingoBoardOptions: () => Array<BingoBoardOption> = () => {
       url,
       label
     };
-  });
+  }).filter(option => option.url !== '' && option.label !== '');
 };

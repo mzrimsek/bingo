@@ -1,12 +1,23 @@
 import './App.css';
 
+import BingoSelector from 'components/bingoSelector/BingoSelector';
 import { getBingoBoardOptions } from './helpers';
+import { useState } from 'react';
 
 function App() {
-  const options = getBingoBoardOptions();
-  console.log(options);
+  const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState('');
 
-  return <div className="App">Hello</div>;
+  const options = getBingoBoardOptions();
+
+  return (
+    <div className="App">
+      <BingoSelector
+        options={options}
+        currentSelection={selectedBingoBoardOption}
+        updateSelection={setSelectedBingoBoardOption}
+      />
+    </div>
+  );
 }
 
 export default App;
