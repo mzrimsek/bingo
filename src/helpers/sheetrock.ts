@@ -1,12 +1,13 @@
 import sheetrock from 'sheetrock';
 
-import env from 'react-dotenv';
-
 type SheetrockCallback = (error, options, response) => void;
 
-export const sheetrockHandler = (callback: SheetrockCallback) => {
+export const sheetrockHandler: (sheetUrl: string, callback: SheetrockCallback) => void = (
+  sheetUrl: string,
+  callback: SheetrockCallback
+) => {
   sheetrock({
-    url: env.GOOGLE_SHEET_URL,
+    url: sheetUrl,
     query: 'select A',
     callback
   });
