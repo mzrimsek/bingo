@@ -31,6 +31,7 @@ function App(): JSX.Element {
       width: '100%'
     },
     board: {
+      padding: theme.spacing(1),
       width: '100%',
       flexGrow: 1
     },
@@ -92,6 +93,25 @@ function App(): JSX.Element {
     sheetrockHandler(selectedBingoBoard, sheetrockCallback);
   };
 
+  const handleToggleSquare = (rowIndex: number, squareIndex: number) => {
+    const updatedBingoBoardRows = bingoBoardRows.map((row, index) => {
+      if (rowIndex === index) {
+        return row.map((squareData, index) => {
+          if (squareIndex === index) {
+            const { toggled } = squareData;
+            return {
+              ...squareData,
+              toggled: !toggled
+            };
+          }
+          return squareData;
+        });
+      }
+      return row;
+    });
+    setBingoBoardRows(updatedBingoBoardRows);
+  };
+
   const generateButtonIsDisabled = selectedBingoBoard === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
@@ -115,7 +135,7 @@ function App(): JSX.Element {
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.board}>
-              <BingoBoard rows={bingoBoardRows} />
+              <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />
             </Card>
           )}
         </Box>
