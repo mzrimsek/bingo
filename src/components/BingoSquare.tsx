@@ -2,7 +2,7 @@ import { primary, secondary } from 'variables';
 
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 
 interface Props {
   data: BingoSquareData;
@@ -21,12 +21,13 @@ function BingoSquare({ data }: Props): JSX.Element {
       background: toggled
         ? `linear-gradient(45deg, ${primary.main} 30%, ${secondary.main} 90%)`
         : undefined,
-      color: toggled ? primary.contrastText : undefined
+      color: toggled ? primary.contrastText : undefined,
+      boxShadow: toggled ? `0 3px 5px 2px ${secondary.mainShadow}` : undefined
     }
   }));
   const classes = useStyles();
 
-  return <div className={classes.bingoSquare}>{display}</div>;
+  return <Button className={classes.bingoSquare}>{display}</Button>;
 }
 
 BingoSquare.propTypes = {
