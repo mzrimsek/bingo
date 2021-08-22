@@ -9,6 +9,7 @@ export const sheetrockHandler: (sheetUrl: string, callback: SheetrockCallback) =
   sheetrock({
     url: sheetUrl,
     query: 'select A',
+    reset: true,
     callback
   });
 };

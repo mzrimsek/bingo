@@ -1,5 +1,7 @@
+import { BingoBoard, BingoBoardSelector } from 'components';
 import {
   Box,
+  Button,
   Card,
   CssBaseline,
   ThemeProvider,
@@ -10,8 +12,7 @@ import {
 import { generateBingoBoard, getBingoBoards, sheetrockHandler } from './helpers';
 import { useMemo, useState } from 'react';
 
-import BingoBoard from 'components/BingoBoard';
-import BingoBoardSelector from 'components/BingoBoardSelector';
+import { BingoSquareData } from 'models';
 
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
@@ -20,7 +21,9 @@ function App(): JSX.Element {
     },
     card: {
       padding: theme.spacing(2),
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
+      display: 'flex',
+      justifyContent: 'space-between'
     }
   }));
   const classes = useStyles();
@@ -37,9 +40,9 @@ function App(): JSX.Element {
   );
 
   const [selectedBingoBoard, setSelectedBingoBoard] = useState('');
-  const bingoBoards = getBingoBoards();
+  const [bingoBoardRows, setBingoBoardRows] = useState<Array<Array<BingoSquareData>>>([]);
 
-  const [bingoBoardOptions, setBingoBoardOptions] = useState([]);
+  const bingoBoards = getBingoBoards();
 
   const updateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
     setSelectedBingoBoard(nextSelectedBingoBoard);
@@ -47,13 +50,28 @@ function App(): JSX.Element {
       if (response && response.rows) {
         const { rows } = response;
         const rowsMinusHeader = rows.filter(row => row.num > 1);
-        const boardOptions = rowsMinusHeader.flatMap(row => row.cellsArray);
-        setBingoBoardOptions(boardOptions);
+
+        const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
+        const boardRows = generateBingoBoard(boardOptions);
+        setBingoBoardRows(boardRows);
       }
     });
   };
 
-  const shouldRenderBingoBoard = bingoBoardOptions.length !== 0;
+  const generateNewBingoBoard = () => {
+    sheetrockHandler(selectedBingoBoard, (_error, _options, response) => {
+      if (response && response.rows) {
+        const { rows } = response;
+        const rowsMinusHeader = rows.filter(row => row.num > 1);
+
+        const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
+        const boardRows = generateBingoBoard(boardOptions);
+        setBingoBoardRows(boardRows);
+      }
+    });
+  };
+
+  const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,10 +83,11 @@ function App(): JSX.Element {
               currentSelection={selectedBingoBoard}
               updateSelection={updateSelectedBingoBoard}
             />
+            <Button onClick={generateNewBingoBoard}>Generate New Board</Button>
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.card}>
-              <BingoBoard rows={generateBingoBoard(bingoBoardOptions)} />
+              <BingoBoard rows={bingoBoardRows} />
             </Card>
           )}
         </Box>
