@@ -1,27 +1,27 @@
-import { BingoSquare } from 'components';
+import { BingoBoardRow } from 'components';
 import { BingoSquareData } from 'models';
-import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
 
 interface Props {
   rows: Array<Array<BingoSquareData>>;
 }
 
 function BingoBoard({ rows }: Props): JSX.Element {
-  const boardRows = rows.map((row, index) => {
-    const squares = row.map((squareData, index) => (
-      <Grid item xs={2} key={index}>
-        <BingoSquare data={squareData} />
-      </Grid>
-    ));
-    return (
-      <Grid container item xs={12} key={index}>
-        {squares}
-      </Grid>
-    );
-  });
+  const useStyles = makeStyles(() => ({
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '100%',
+      height: '100%',
+      alignItems: 'center'
+    }
+  }));
+  const classes = useStyles();
 
-  return <Grid container>{boardRows}</Grid>;
+  const boardRows = rows.map((row, index) => <BingoBoardRow key={index} row={row} />);
+
+  return <div className={classes.container}>{boardRows}</div>;
 }
 
 BingoBoard.propTypes = {

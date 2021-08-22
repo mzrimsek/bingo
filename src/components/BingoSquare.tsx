@@ -1,21 +1,24 @@
-import { Container, makeStyles } from '@material-ui/core';
-
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
 
 interface Props {
   data: BingoSquareData;
 }
 
 function BingoSquare({ data }: Props): JSX.Element {
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles(() => ({
     bingoSquare: {
-      margin: theme.spacing(1)
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   }));
   const classes = useStyles();
 
-  return <Container className={classes.bingoSquare}>{data.display}</Container>;
+  return <div className={classes.bingoSquare}>{data.display}</div>;
 }
 
 BingoSquare.propTypes = {
