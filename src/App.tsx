@@ -7,23 +7,22 @@ import {
   makeStyles,
   useMediaQuery
 } from '@material-ui/core';
-import { getBingoBoards, sheetrockHandler } from './helpers';
+import { generateBingoBoard, getBingoBoards, sheetrockHandler } from './helpers';
 import { useMemo, useState } from 'react';
 
 import BingoBoard from 'components/BingoBoard';
 import BingoBoardSelector from 'components/BingoBoardSelector';
 
-const useStyles = makeStyles(theme => ({
-  wrapper: {
-    padding: theme.spacing(2)
-  },
-  card: {
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(2)
-  }
-}));
-
 function App(): JSX.Element {
+  const useStyles = makeStyles(theme => ({
+    wrapper: {
+      padding: theme.spacing(2)
+    },
+    card: {
+      padding: theme.spacing(2),
+      marginBottom: theme.spacing(2)
+    }
+  }));
   const classes = useStyles();
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -69,7 +68,7 @@ function App(): JSX.Element {
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.card}>
-              <BingoBoard boardOptions={bingoBoardOptions} />
+              <BingoBoard rows={generateBingoBoard(bingoBoardOptions)} />
             </Card>
           )}
         </Box>

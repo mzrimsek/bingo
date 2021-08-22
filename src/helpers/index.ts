@@ -1,2 +1,2 @@
 export * from './sheetrock';
-export * from './bingoBoardOptions';
+export * from './bingoBoard';

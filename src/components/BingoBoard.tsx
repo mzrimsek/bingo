@@ -1,20 +1,38 @@
-import { Container } from '@material-ui/core';
+import { BingoSquare } from 'components';
+import { BingoSquareData } from 'models';
+import { Grid } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 interface Props {
-  boardOptions: Array<string>;
+  rows: Array<Array<BingoSquareData>>;
 }
 
-function BingoBoard({ boardOptions }: Props): JSX.Element {
-  const tempDisplay = boardOptions.map((option, index) => {
-    <Container key={index}>{option}</Container>;
+function BingoBoard({ rows }: Props): JSX.Element {
+  const boardRows = rows.map((row, index) => {
+    const squares = row.map((squareData, index) => (
+      <Grid item xs={2} key={index}>
+        <BingoSquare data={squareData} />
+      </Grid>
+    ));
+    return (
+      <Grid container item xs={12} key={index}>
+        {squares}
+      </Grid>
+    );
   });
 
-  return <Container>{tempDisplay}</Container>;
+  return <Grid container>{boardRows}</Grid>;
 }
 
 BingoBoard.propTypes = {
-  boardOptions: PropTypes.arrayOf(PropTypes.string).isRequired
+  rows: PropTypes.arrayOf(
+    PropTypes.arrayOf(
+      PropTypes.exact({
+        display: PropTypes.string,
+        toggled: PropTypes.bool
+      })
+    )
+  ).isRequired
 };
 
 export default BingoBoard;
