@@ -1,3 +1,5 @@
+export type SheetrockCallback = (error, options, response) => void;
+
 export interface BingoBoardOption {
   url: string;
   label: string;

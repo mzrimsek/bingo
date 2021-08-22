@@ -1,4 +1,5 @@
 import { BingoBoard, BingoBoardSelector } from 'components';
+import { BingoSquareData, SheetrockCallback } from 'models';
 import {
   Box,
   Button,
@@ -11,8 +12,6 @@ import {
 } from '@material-ui/core';
 import { generateBingoBoard, getBingoBoards, sheetrockHandler } from './helpers';
 import { useMemo, useState } from 'react';
-
-import { BingoSquareData } from 'models';
 
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
@@ -44,33 +43,27 @@ function App(): JSX.Element {
 
   const bingoBoards = getBingoBoards();
 
+  const sheetrockCallback: SheetrockCallback = (_error, _options, response) => {
+    if (response && response.rows) {
+      const { rows } = response;
+      const rowsMinusHeader = rows.filter(row => row.num !== 0);
+
+      const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
+      const boardRows = generateBingoBoard(boardOptions);
+      setBingoBoardRows(boardRows);
+    }
+  };
+
   const updateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
     setSelectedBingoBoard(nextSelectedBingoBoard);
-    sheetrockHandler(nextSelectedBingoBoard, (_error, _options, response) => {
-      if (response && response.rows) {
-        const { rows } = response;
-        const rowsMinusHeader = rows.filter(row => row.num > 1);
-
-        const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
-        const boardRows = generateBingoBoard(boardOptions);
-        setBingoBoardRows(boardRows);
-      }
-    });
+    sheetrockHandler(nextSelectedBingoBoard, sheetrockCallback);
   };
 
   const generateNewBingoBoard = () => {
-    sheetrockHandler(selectedBingoBoard, (_error, _options, response) => {
-      if (response && response.rows) {
-        const { rows } = response;
-        const rowsMinusHeader = rows.filter(row => row.num > 1);
-
-        const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
-        const boardRows = generateBingoBoard(boardOptions);
-        setBingoBoardRows(boardRows);
-      }
-    });
+    sheetrockHandler(selectedBingoBoard, sheetrockCallback);
   };
 
+  const generateButtonIsDisabled = selectedBingoBoard === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
@@ -83,7 +76,9 @@ function App(): JSX.Element {
               currentSelection={selectedBingoBoard}
               updateSelection={updateSelectedBingoBoard}
             />
-            <Button onClick={generateNewBingoBoard}>Generate New Board</Button>
+            <Button disabled={generateButtonIsDisabled} onClick={generateNewBingoBoard}>
+              Generate New Board
+            </Button>
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.card}>
