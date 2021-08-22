@@ -1,7 +1,6 @@
-import { makeStyles } from '@material-ui/core';
-
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core';
 
 interface Props {
   data: BingoSquareData;

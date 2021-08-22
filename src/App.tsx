@@ -10,19 +10,36 @@ import {
   makeStyles,
   useMediaQuery
 } from '@material-ui/core';
-import { generateBingoBoard, getBingoBoards, sheetrockHandler } from './helpers';
+import { generateBingoBoard, getBingoBoards, sheetrockHandler } from 'helpers';
+import { primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
     wrapper: {
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100vh'
     },
-    card: {
+    header: {
       padding: theme.spacing(2),
       marginBottom: theme.spacing(2),
       display: 'flex',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%'
+    },
+    board: {
+      width: '100%',
+      flexGrow: 1
+    },
+    generateButton: {
+      padding: theme.spacing(2),
+      marginLeft: theme.spacing(2),
+      background: `linear-gradient(45deg, ${primary.main} 30%, ${secondary.main} 90%)`,
+      color: primary.contrastText,
+      boxShadow: `0 3px 5px 2px ${secondary.mainShadow}`
     }
   }));
   const classes = useStyles();
@@ -32,7 +49,19 @@ function App(): JSX.Element {
     () =>
       createTheme({
         palette: {
-          type: prefersDarkMode ? 'dark' : 'light'
+          type: prefersDarkMode ? 'dark' : 'light',
+          primary: {
+            light: primary.light,
+            main: primary.main,
+            dark: primary.dark,
+            contrastText: primary.contrastText
+          },
+          secondary: {
+            light: secondary.light,
+            main: secondary.main,
+            dark: secondary.dark,
+            contrastText: secondary.contrastText
+          }
         }
       }),
     [prefersDarkMode]
@@ -70,18 +99,22 @@ function App(): JSX.Element {
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <Box className={classes.wrapper}>
-          <Card className={classes.card}>
+          <Card className={classes.header}>
             <BingoBoardSelector
               options={bingoBoards}
               currentSelection={selectedBingoBoard}
               updateSelection={updateSelectedBingoBoard}
             />
-            <Button disabled={generateButtonIsDisabled} onClick={generateNewBingoBoard}>
+            <Button
+              className={classes.generateButton}
+              disabled={generateButtonIsDisabled}
+              onClick={generateNewBingoBoard}
+            >
               Generate New Board
             </Button>
           </Card>
           {shouldRenderBingoBoard && (
-            <Card className={classes.card}>
+            <Card className={classes.board}>
               <BingoBoard rows={bingoBoardRows} />
             </Card>
           )}
