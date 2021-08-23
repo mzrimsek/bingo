@@ -5,9 +5,11 @@ import { makeStyles } from '@material-ui/core';
 
 interface Props {
   row: Array<BingoSquareData>;
+  rowIndex: number;
+  onToggleSquare: (rowIndex: number, squareIndex: number) => void;
 }
 
-function BingoBoardRow({ row }: Props): JSX.Element {
+function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
   const useStyles = makeStyles(theme => ({
     row: {
       display: 'flex',
@@ -22,11 +24,14 @@ function BingoBoardRow({ row }: Props): JSX.Element {
   }));
   const classes = useStyles();
 
-  const squares = row.map((squareData, index) => (
-    <div key={index} className={classes.square}>
-      <BingoSquare data={squareData} />
-    </div>
-  ));
+  const squares = row.map((squareData, index) => {
+    const handleSquareClick = () => onToggleSquare(rowIndex, index);
+    return (
+      <div key={index} className={classes.square} onClick={handleSquareClick}>
+        <BingoSquare data={squareData} />
+      </div>
+    );
+  });
   return <div className={classes.row}>{squares}</div>;
 }
 
@@ -36,7 +41,9 @@ BingoBoardRow.propTypes = {
       display: PropTypes.string,
       toggled: PropTypes.bool
     })
-  ).isRequired
+  ).isRequired,
+  rowIndex: PropTypes.number.isRequired,
+  onToggleSquare: PropTypes.func.isRequired
 };
 
 export default BingoBoardRow;

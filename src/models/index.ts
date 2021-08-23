@@ -1,4 +1,14 @@
-export type SheetrockCallback = (error, options, response) => void;
+export interface BoardOptionQueryResult {
+  main: string;
+  variant1?: string;
+  variant2?: string;
+  variant3?: string;
+}
+
+export type BoardOptionCallback = (
+  sheetUrl: string,
+  boardOptions: Array<BoardOptionQueryResult>
+) => void;
 
 export interface BingoBoardOption {
   url: string;

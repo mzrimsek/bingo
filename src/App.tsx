@@ -1,5 +1,5 @@
 import { BingoBoard, BingoBoardSelector } from 'components';
-import { BingoSquareData, SheetrockCallback } from 'models';
+import { BingoSquareData, BoardOptionCallback } from 'models';
 import {
   Box,
   Button,
@@ -10,8 +10,17 @@ import {
   makeStyles,
   useMediaQuery
 } from '@material-ui/core';
-import { generateBingoBoard, getBingoBoards, sheetrockHandler } from 'helpers';
-import { primary, secondary } from 'variables';
+import {
+  generateBingoBoard,
+  getBingoBoards,
+  getBoardNameFromUrl,
+  persistBingoBoard,
+  persistSelectedBingoBoard,
+  retrieveBingoBoard,
+  retrieveSelectedBingoBoard,
+  sheetrockHandler
+} from 'helpers';
+import { gradientButtonStyles, primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
 function App(): JSX.Element {
@@ -31,15 +40,14 @@ function App(): JSX.Element {
       width: '100%'
     },
     board: {
+      padding: theme.spacing(1),
       width: '100%',
       flexGrow: 1
     },
     generateButton: {
       padding: theme.spacing(2),
       marginLeft: theme.spacing(2),
-      background: `linear-gradient(45deg, ${primary.main} 30%, ${secondary.main} 90%)`,
-      color: primary.contrastText,
-      boxShadow: `0 3px 5px 2px ${secondary.mainShadow}`
+      ...gradientButtonStyles
     }
   }));
   const classes = useStyles();
@@ -67,29 +75,78 @@ function App(): JSX.Element {
     [prefersDarkMode]
   );
 
-  const [selectedBingoBoard, setSelectedBingoBoard] = useState('');
-  const [bingoBoardRows, setBingoBoardRows] = useState<Array<Array<BingoSquareData>>>([]);
+  const persistedSelectedBingoBoard = retrieveSelectedBingoBoard();
+  const initialSelectedBingoBoard = persistedSelectedBingoBoard ? persistedSelectedBingoBoard : '';
+  const [selectedBingoBoard, setSelectedBingoBoard] = useState(initialSelectedBingoBoard);
+
+  let initialBingoBoardRows: Array<Array<BingoSquareData>> = [];
+  if (initialBingoBoardRows) {
+    const targetBoard = getBoardNameFromUrl(initialSelectedBingoBoard);
+    if (targetBoard) {
+      const persistedBoard = retrieveBingoBoard(targetBoard);
+      if (persistedBoard) {
+        initialBingoBoardRows = persistedBoard;
+      }
+    }
+  }
+  const [bingoBoardRows, setBingoBoardRows] =
+    useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
   const bingoBoards = getBingoBoards();
 
-  const sheetrockCallback: SheetrockCallback = (_error, _options, response) => {
-    if (response && response.rows) {
-      const { rows } = response;
-      const rowsMinusHeader = rows.filter(row => row.num !== 0);
+  const updateBingoBoard: (sheetUrl: string, boardRows: Array<Array<BingoSquareData>>) => void = (
+    sheetUrl,
+    boardRows
+  ) => {
+    setBingoBoardRows(boardRows);
 
-      const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
-      const boardRows = generateBingoBoard(boardOptions);
-      setBingoBoardRows(boardRows);
+    const targetBoard = getBoardNameFromUrl(sheetUrl);
+    if (targetBoard) {
+      persistBingoBoard(targetBoard, boardRows);
     }
   };
 
-  const updateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
-    setSelectedBingoBoard(nextSelectedBingoBoard);
-    sheetrockHandler(nextSelectedBingoBoard, sheetrockCallback);
+  const generateNewBingoBoard: BoardOptionCallback = (sheetUrl, boardOptions) => {
+    const boardRows = generateBingoBoard(boardOptions);
+    updateBingoBoard(sheetUrl, boardRows);
   };
 
-  const generateNewBingoBoard = () => {
-    sheetrockHandler(selectedBingoBoard, sheetrockCallback);
+  const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
+    setSelectedBingoBoard(nextSelectedBingoBoard);
+    persistSelectedBingoBoard(nextSelectedBingoBoard);
+
+    const targetBoard = getBoardNameFromUrl(nextSelectedBingoBoard);
+    if (targetBoard) {
+      const persistedBoard = retrieveBingoBoard(targetBoard);
+      if (persistedBoard) {
+        setBingoBoardRows(persistedBoard);
+      } else {
+        sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
+      }
+    }
+  };
+
+  const handleGenerateBoardClick = () => {
+    sheetrockHandler(selectedBingoBoard, generateNewBingoBoard);
+  };
+
+  const handleToggleSquare = (rowIndex: number, squareIndex: number) => {
+    const updatedBingoBoardRows = bingoBoardRows.map((row, index) => {
+      if (rowIndex === index) {
+        return row.map((squareData, index) => {
+          if (squareIndex === index) {
+            const { toggled } = squareData;
+            return {
+              ...squareData,
+              toggled: !toggled
+            };
+          }
+          return squareData;
+        });
+      }
+      return row;
+    });
+    updateBingoBoard(selectedBingoBoard, updatedBingoBoardRows);
   };
 
   const generateButtonIsDisabled = selectedBingoBoard === '';
@@ -103,19 +160,19 @@ function App(): JSX.Element {
             <BingoBoardSelector
               options={bingoBoards}
               currentSelection={selectedBingoBoard}
-              updateSelection={updateSelectedBingoBoard}
+              onUpdateSelection={handleUpdateSelectedBingoBoard}
             />
             <Button
               className={classes.generateButton}
               disabled={generateButtonIsDisabled}
-              onClick={generateNewBingoBoard}
+              onClick={handleGenerateBoardClick}
             >
               Generate New Board
             </Button>
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.board}>
-              <BingoBoard rows={bingoBoardRows} />
+              <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />
             </Card>
           )}
         </Box>
