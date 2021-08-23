@@ -68,3 +68,11 @@ export const generateBingoBoard: (boardOptions: Array<string>) => Array<Array<Bi
       }));
     });
   };
+
+export const getBoardNameFromUrl: (sheetUrl: string) => string | undefined = sheetUrl => {
+  return getBingoBoards().find(board => board.url === sheetUrl)?.label;
+};
+
+export const getBoardUrlFromName: (name: string) => string | undefined = name => {
+  return getBingoBoards().find(board => board.label === name)?.url;
+};

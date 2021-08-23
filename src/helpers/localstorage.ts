@@ -1,3 +1,5 @@
+import { getBoardNameFromUrl, getBoardUrlFromName } from './bingoBoard';
+
 import { BingoSquareData } from 'models';
 
 export const persistBingoBoard: (
@@ -13,3 +15,25 @@ export const retrieveBingoBoard: (targetBoard: string) => Array<Array<BingoSquar
     const boardData = window.localStorage.getItem(targetBoard);
     return boardData ? JSON.parse(boardData) : [];
   };
+
+export const persistSelectedBingoBoard: (selectedBingoBoard: string) => void =
+  selectedBingoBoard => {
+    const boardName = getBoardNameFromUrl(selectedBingoBoard);
+    if (boardName) {
+      window.localStorage.setItem('selectedBingoBoard', boardName);
+    }
+  };
+
+export const retrieveSelectedBingoBoard: () => string | null = () => {
+  const selectedBoard = window.localStorage.getItem('selectedBingoBoard');
+  if (!selectedBoard) {
+    return null;
+  }
+
+  const boardUrl = getBoardUrlFromName(selectedBoard);
+  if (!boardUrl) {
+    return null;
+  }
+
+  return boardUrl;
+};

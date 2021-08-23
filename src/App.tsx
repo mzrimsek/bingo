@@ -13,8 +13,11 @@ import {
 import {
   generateBingoBoard,
   getBingoBoards,
+  getBoardNameFromUrl,
   persistBingoBoard,
+  persistSelectedBingoBoard,
   retrieveBingoBoard,
+  retrieveSelectedBingoBoard,
   sheetrockHandler
 } from 'helpers';
 import { primary, secondary } from 'variables';
@@ -74,14 +77,24 @@ function App(): JSX.Element {
     [prefersDarkMode]
   );
 
-  const [selectedBingoBoard, setSelectedBingoBoard] = useState('');
-  const [bingoBoardRows, setBingoBoardRows] = useState<Array<Array<BingoSquareData>>>([]);
+  const persistedSelectedBingoBoard = retrieveSelectedBingoBoard();
+  const initialSelectedBingoBoard = persistedSelectedBingoBoard ? persistedSelectedBingoBoard : '';
+  const [selectedBingoBoard, setSelectedBingoBoard] = useState(initialSelectedBingoBoard);
+
+  let initialBingoBoardRows: Array<Array<BingoSquareData>> = [];
+  if (initialBingoBoardRows) {
+    const targetBoard = getBoardNameFromUrl(initialSelectedBingoBoard);
+    if (targetBoard) {
+      const persistedBoard = retrieveBingoBoard(targetBoard);
+      if (persistedBoard) {
+        initialBingoBoardRows = persistedBoard;
+      }
+    }
+  }
+  const [bingoBoardRows, setBingoBoardRows] =
+    useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
   const bingoBoards = getBingoBoards();
-
-  const getBoardNameFromUrl: (sheetUrl: string) => string | undefined = sheetUrl => {
-    return bingoBoards.find(board => board.url === sheetUrl)?.label;
-  };
 
   const updateBingoBoard: (sheetUrl: string, boardRows: Array<Array<BingoSquareData>>) => void = (
     sheetUrl,
@@ -102,6 +115,7 @@ function App(): JSX.Element {
 
   const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
     setSelectedBingoBoard(nextSelectedBingoBoard);
+    persistSelectedBingoBoard(nextSelectedBingoBoard);
 
     const targetBoard = getBoardNameFromUrl(nextSelectedBingoBoard);
     if (targetBoard) {
