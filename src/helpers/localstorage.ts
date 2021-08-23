@@ -13,7 +13,7 @@ export const persistBingoBoard: (
 export const retrieveBingoBoard: (targetBoard: string) => Array<Array<BingoSquareData>> | null =
   targetBoard => {
     const boardData = window.localStorage.getItem(targetBoard);
-    return boardData ? JSON.parse(boardData) : [];
+    return boardData ? JSON.parse(boardData) : null;
   };
 
 export const persistSelectedBingoBoard: (selectedBingoBoard: string) => void =
