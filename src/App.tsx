@@ -21,6 +21,7 @@ import {
 } from 'helpers';
 import { gradientButtonStyles, primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
+import { useTitle } from 'react-use';
 
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
@@ -141,7 +142,11 @@ function App(): JSX.Element {
     updateCurrentBingoBoard(selectedBingoBoardOption.label, updatedBingoBoardRows);
   };
 
+  const title = selectedBingoBoardOption.label ? `Bingo - ${selectedBingoBoardOption.label}` : 'Bingo';
+  useTitle(title);
+
   const bingoBoards = getBingoBoards();
+
   const generateButtonIsDisabled = selectedBingoBoardOption.label === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
