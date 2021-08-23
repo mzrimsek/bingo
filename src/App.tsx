@@ -1,5 +1,5 @@
 import { BingoBoard, BingoBoardSelector } from 'components';
-import { BingoSquareData, BoardOptionCallback } from 'models';
+import { BingoBoardOption, BingoSquareData } from 'models';
 import {
   Box,
   Button,
@@ -13,15 +13,16 @@ import {
 import {
   generateBingoBoard,
   getBingoBoards,
-  getBoardNameFromUrl,
   persistBingoBoard,
-  persistSelectedBingoBoard,
+  persistSelectedBingoBoardName,
+  querySheetrock,
   retrieveBingoBoard,
-  retrieveSelectedBingoBoard,
-  sheetrockHandler
+  retrieveSelectedBingoBoardOption
 } from 'helpers';
 import { gradientButtonStyles, primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
+
+import { useTitle } from 'react-use';
 
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
@@ -75,59 +76,52 @@ function App(): JSX.Element {
     [prefersDarkMode]
   );
 
-  const persistedSelectedBingoBoard = retrieveSelectedBingoBoard();
-  const initialSelectedBingoBoard = persistedSelectedBingoBoard ? persistedSelectedBingoBoard : '';
-  const [selectedBingoBoard, setSelectedBingoBoard] = useState(initialSelectedBingoBoard);
+  const initialSelectedBingoBoardOption = retrieveSelectedBingoBoardOption();
+  const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState<BingoBoardOption>(
+    initialSelectedBingoBoardOption
+  );
 
   let initialBingoBoardRows: Array<Array<BingoSquareData>> = [];
   if (initialBingoBoardRows) {
-    const targetBoard = getBoardNameFromUrl(initialSelectedBingoBoard);
-    if (targetBoard) {
-      const persistedBoard = retrieveBingoBoard(targetBoard);
-      if (persistedBoard) {
-        initialBingoBoardRows = persistedBoard;
-      }
+    const persistedBoard = retrieveBingoBoard(initialSelectedBingoBoardOption.label);
+    if (persistedBoard) {
+      initialBingoBoardRows = persistedBoard;
     }
   }
   const [bingoBoardRows, setBingoBoardRows] =
     useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
-  const bingoBoards = getBingoBoards();
-
-  const updateBingoBoard: (sheetUrl: string, boardRows: Array<Array<BingoSquareData>>) => void = (
-    sheetUrl,
-    boardRows
-  ) => {
+  const updateCurrentBingoBoard: (
+    boardName: string,
+    boardRows: Array<Array<BingoSquareData>>
+  ) => void = (boardName, boardRows) => {
     setBingoBoardRows(boardRows);
-
-    const targetBoard = getBoardNameFromUrl(sheetUrl);
-    if (targetBoard) {
-      persistBingoBoard(targetBoard, boardRows);
+    if (boardName) {
+      persistBingoBoard(boardName, boardRows);
     }
   };
 
-  const generateNewBingoBoard: BoardOptionCallback = (sheetUrl, boardOptions) => {
-    const boardRows = generateBingoBoard(boardOptions);
-    updateBingoBoard(sheetUrl, boardRows);
+  const generateNewBingoBoard: (sheetUrl: string) => void = sheetUrl => {
+    querySheetrock(sheetUrl, (boardName, boardOptions) => {
+      const boardRows = generateBingoBoard(boardOptions);
+      updateCurrentBingoBoard(boardName, boardRows);
+    });
   };
 
-  const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
-    setSelectedBingoBoard(nextSelectedBingoBoard);
-    persistSelectedBingoBoard(nextSelectedBingoBoard);
+  const handleUpdateSelectedBingoBoardOption = (nextSelectedBingoBoardOption: BingoBoardOption) => {
+    setSelectedBingoBoardOption(nextSelectedBingoBoardOption);
+    persistSelectedBingoBoardName(nextSelectedBingoBoardOption.label);
 
-    const targetBoard = getBoardNameFromUrl(nextSelectedBingoBoard);
-    if (targetBoard) {
-      const persistedBoard = retrieveBingoBoard(targetBoard);
-      if (persistedBoard) {
-        setBingoBoardRows(persistedBoard);
-      } else {
-        sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
-      }
+    const persistedBoard = retrieveBingoBoard(nextSelectedBingoBoardOption.label);
+    if (persistedBoard) {
+      setBingoBoardRows(persistedBoard);
+    } else {
+      generateNewBingoBoard(nextSelectedBingoBoardOption.url);
     }
   };
 
   const handleGenerateBoardClick = () => {
-    sheetrockHandler(selectedBingoBoard, generateNewBingoBoard);
+    generateNewBingoBoard(selectedBingoBoardOption.url);
   };
 
   const handleToggleSquare = (rowIndex: number, squareIndex: number) => {
@@ -146,10 +140,17 @@ function App(): JSX.Element {
       }
       return row;
     });
-    updateBingoBoard(selectedBingoBoard, updatedBingoBoardRows);
+    updateCurrentBingoBoard(selectedBingoBoardOption.label, updatedBingoBoardRows);
   };
 
-  const generateButtonIsDisabled = selectedBingoBoard === '';
+  const title = selectedBingoBoardOption.label
+    ? `Bingo - ${selectedBingoBoardOption.label}`
+    : 'Bingo';
+  useTitle(title);
+
+  const bingoBoards = getBingoBoards();
+
+  const generateButtonIsDisabled = selectedBingoBoardOption.label === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
@@ -159,8 +160,8 @@ function App(): JSX.Element {
           <Card className={classes.header}>
             <BingoBoardSelector
               options={bingoBoards}
-              currentSelection={selectedBingoBoard}
-              onUpdateSelection={handleUpdateSelectedBingoBoard}
+              currentSelection={selectedBingoBoardOption.url}
+              onUpdateSelection={handleUpdateSelectedBingoBoardOption}
             />
             <Button
               className={classes.generateButton}

@@ -1,5 +1,6 @@
 import { BoardOptionCallback, BoardOptionQueryResult } from 'models';
 
+import { getBoardNameFromUrl } from 'helpers';
 import sheetrock from 'sheetrock';
 
 interface SheetrockRow {
@@ -7,7 +8,7 @@ interface SheetrockRow {
   cellsArray: Array<string>;
 }
 
-export const sheetrockHandler: (sheetUrl: string, callback: BoardOptionCallback) => void = (
+export const querySheetrock: (sheetUrl: string, callback: BoardOptionCallback) => void = (
   sheetUrl: string,
   callback: BoardOptionCallback
 ) => {
@@ -34,7 +35,9 @@ export const sheetrockHandler: (sheetUrl: string, callback: BoardOptionCallback)
             }, {});
           }
         );
-        callback(sheetUrl, boardOptions);
+
+        const boardName = getBoardNameFromUrl(sheetUrl) ?? '';
+        callback(boardName, boardOptions);
       }
     },
     reset: true
