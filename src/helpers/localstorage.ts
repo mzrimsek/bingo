@@ -1,39 +1,41 @@
-import { getBoardNameFromUrl, getBoardUrlFromName } from './bingoBoard';
+import { BingoBoardOption, BingoSquareData } from 'models';
 
-import { BingoSquareData } from 'models';
+import { getBoardUrlFromName } from 'helpers';
 
 export const persistBingoBoard: (
-  targetBoard: string,
+  boardName: string,
   boardRows: Array<Array<BingoSquareData>>
-) => void = (targetBoard, nextBingoData) => {
+) => void = (boardName, nextBingoData) => {
   const stringifiedData = JSON.stringify(nextBingoData);
-  window.localStorage.setItem(targetBoard, stringifiedData);
+  window.localStorage.setItem(boardName, stringifiedData);
 };
 
-export const retrieveBingoBoard: (targetBoard: string) => Array<Array<BingoSquareData>> | null =
-  targetBoard => {
-    const boardData = window.localStorage.getItem(targetBoard);
+export const retrieveBingoBoard: (boardName: string) => Array<Array<BingoSquareData>> | null =
+  boardName => {
+    const boardData = window.localStorage.getItem(boardName);
     return boardData ? JSON.parse(boardData) : null;
   };
 
-export const persistSelectedBingoBoardUrl: (selectedBingoBoard: string) => void =
-  selectedBingoBoard => {
-    const boardName = getBoardNameFromUrl(selectedBingoBoard);
-    if (boardName) {
-      window.localStorage.setItem('selectedBingoBoardUrl', boardName);
-    }
-  };
+const selectedBoardNameKey = 'selectedBoardName';
+export const persistSelectedBingoBoardName: (boardName: string) => void = boardName => {
+  if (boardName) {
+    window.localStorage.setItem(selectedBoardNameKey, boardName);
+  }
+};
 
-export const retrieveSelectedBingoBoardUrl: () => string | null = () => {
-  const selectedBoard = window.localStorage.getItem('selectedBingoBoardUrl');
-  if (!selectedBoard) {
-    return null;
+export const retrieveSelectedBingoBoardOption: () => BingoBoardOption = () => {
+  const selectedBoardName = window.localStorage.getItem(selectedBoardNameKey);
+  if (!selectedBoardName) {
+    return { url: '', label: '' };
   }
 
-  const boardUrl = getBoardUrlFromName(selectedBoard);
+  const boardUrl = getBoardUrlFromName(selectedBoardName);
   if (!boardUrl) {
-    return null;
+    return { url: '', label: '' };
   }
 
-  return boardUrl;
+  return {
+    url: boardUrl,
+    label: selectedBoardName
+  };
 };

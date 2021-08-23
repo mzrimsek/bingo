@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 interface Props {
   options: Array<BingoBoardOption>;
   currentSelection: string;
-  onUpdateSelection: (nextValue: string) => void;
+  onUpdateSelection: (nextValue: BingoBoardOption) => void;
 }
 
 function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Props): JSX.Element {
@@ -24,7 +24,14 @@ function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Pr
   }));
   const classes = useStyles();
 
-  const handleChange = event => onUpdateSelection(event.target.value);
+  const handleChange = event => {
+    const url: string = event.target.value;
+    const matchingOption = options.find(option => option.url === url);
+    const label = matchingOption ? matchingOption.label : '';
+
+    const nextOption: BingoBoardOption = { url, label };
+    onUpdateSelection(nextOption);
+  };
 
   const nodes = options.map((option, index) => {
     return (

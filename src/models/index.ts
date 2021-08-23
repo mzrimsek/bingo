@@ -6,7 +6,7 @@ export interface BoardOptionQueryResult {
 }
 
 export type BoardOptionCallback = (
-  sheetUrl: string,
+  boardName: string,
   boardOptions: Array<BoardOptionQueryResult>
 ) => void;
 
