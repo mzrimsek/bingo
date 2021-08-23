@@ -1,4 +1,4 @@
-import { BingoBoard, BingoBoardSelector, ExportButton } from 'components';
+import { BingoBoard, BingoBoardSelector, ExportButton, ImportButton } from 'components';
 import { BingoBoardOption, BingoSquareData } from 'models';
 import {
   Box,
@@ -169,6 +169,7 @@ function App(): JSX.Element {
             />
             <div className={classes.actions}>
               <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
+              <ImportButton disabled={actionButtonIsDisabled} />
               <Button
                 className={classes.actionButton}
                 disabled={actionButtonIsDisabled}

@@ -1,11 +1,11 @@
-import { Button, makeStyles, Snackbar } from '@material-ui/core';
+import { Button, Snackbar, makeStyles } from '@material-ui/core';
 
+import { Alert } from '@material-ui/lab';
 import { BingoSquareData } from 'models';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import { gradientButtonStyles } from 'variables';
-import { Alert } from '@material-ui/lab';
+import { useState } from 'react';
 
 interface Props {
   bingoBoardRows: Array<Array<BingoSquareData>>;
@@ -28,14 +28,18 @@ function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
   return (
     <div>
       <CopyToClipboard text={stringifiedData} onCopy={() => setOpen(true)}>
-        <Button className={classes.actionButton} disabled={disabled}>Export Board</Button>
+        <Button className={classes.actionButton} disabled={disabled}>
+          Export Board
+        </Button>
       </CopyToClipboard>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         open={open}
         autoHideDuration={3000}
         onClose={() => setOpen(false)}
-      ><Alert severity="info">Copied to clipboard!</Alert></Snackbar>
+      >
+        <Alert severity="info">Copied to clipboard!</Alert>
+      </Snackbar>
     </div>
   );
 }
