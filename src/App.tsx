@@ -1,4 +1,4 @@
-import { BingoBoard, BingoBoardSelector } from 'components';
+import { BingoBoard, BingoBoardSelector, ExportButton } from 'components';
 import { BingoBoardOption, BingoSquareData } from 'models';
 import {
   Box,
@@ -45,7 +45,11 @@ function App(): JSX.Element {
       width: '100%',
       flexGrow: 1
     },
-    generateButton: {
+    actions: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    actionButton: {
       padding: theme.spacing(2),
       marginLeft: theme.spacing(2),
       ...gradientButtonStyles
@@ -150,7 +154,7 @@ function App(): JSX.Element {
 
   const bingoBoards = getBingoBoards();
 
-  const generateButtonIsDisabled = selectedBingoBoardOption.label === '';
+  const actionButtonIsDisabled = selectedBingoBoardOption.label === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
@@ -163,13 +167,16 @@ function App(): JSX.Element {
               currentSelection={selectedBingoBoardOption.url}
               onUpdateSelection={handleUpdateSelectedBingoBoardOption}
             />
-            <Button
-              className={classes.generateButton}
-              disabled={generateButtonIsDisabled}
-              onClick={handleGenerateBoardClick}
-            >
-              Generate New Board
-            </Button>
+            <div className={classes.actions}>
+              <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
+              <Button
+                className={classes.actionButton}
+                disabled={actionButtonIsDisabled}
+                onClick={handleGenerateBoardClick}
+              >
+                Generate New Board
+              </Button>
+            </div>
           </Card>
           {shouldRenderBingoBoard && (
             <Card className={classes.board}>
