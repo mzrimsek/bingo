@@ -1,5 +1,5 @@
 import { Button, makeStyles } from '@material-ui/core';
-import { primary, secondary } from 'variables';
+import { gradientButtonStyles } from 'variables';
 
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
@@ -18,11 +18,7 @@ function BingoSquare({ data }: Props): JSX.Element {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      background: toggled
-        ? `linear-gradient(45deg, ${primary.main} 30%, ${secondary.main} 90%)`
-        : undefined,
-      color: toggled ? primary.contrastText : undefined,
-      boxShadow: toggled ? `0 3px 5px 2px ${secondary.mainShadow}` : undefined
+      ...(toggled ? gradientButtonStyles : {})
     }
   }));
   const classes = useStyles();

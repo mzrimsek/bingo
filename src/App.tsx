@@ -20,7 +20,7 @@ import {
   retrieveSelectedBingoBoard,
   sheetrockHandler
 } from 'helpers';
-import { primary, secondary } from 'variables';
+import { gradientButtonStyles, primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
 function App(): JSX.Element {
@@ -47,9 +47,7 @@ function App(): JSX.Element {
     generateButton: {
       padding: theme.spacing(2),
       marginLeft: theme.spacing(2),
-      background: `linear-gradient(45deg, ${primary.main} 30%, ${secondary.main} 90%)`,
-      color: primary.contrastText,
-      boxShadow: `0 3px 5px 2px ${secondary.mainShadow}`
+      ...gradientButtonStyles
     }
   }));
   const classes = useStyles();
