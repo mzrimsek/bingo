@@ -16,16 +16,16 @@ export const retrieveBingoBoard: (targetBoard: string) => Array<Array<BingoSquar
     return boardData ? JSON.parse(boardData) : null;
   };
 
-export const persistSelectedBingoBoard: (selectedBingoBoard: string) => void =
+export const persistSelectedBingoBoardUrl: (selectedBingoBoard: string) => void =
   selectedBingoBoard => {
     const boardName = getBoardNameFromUrl(selectedBingoBoard);
     if (boardName) {
-      window.localStorage.setItem('selectedBingoBoard', boardName);
+      window.localStorage.setItem('selectedBingoBoardUrl', boardName);
     }
   };
 
-export const retrieveSelectedBingoBoard: () => string | null = () => {
-  const selectedBoard = window.localStorage.getItem('selectedBingoBoard');
+export const retrieveSelectedBingoBoardUrl: () => string | null = () => {
+  const selectedBoard = window.localStorage.getItem('selectedBingoBoardUrl');
   if (!selectedBoard) {
     return null;
   }

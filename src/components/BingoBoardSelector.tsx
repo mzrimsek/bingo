@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 interface Props {
   options: Array<BingoBoardOption>;
   currentSelection: string;
-  onUpdateSelection: (nextValue) => void;
+  onUpdateSelection: (nextValue: string) => void;
 }
 
 function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Props): JSX.Element {

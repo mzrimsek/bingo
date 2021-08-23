@@ -34,6 +34,7 @@ export const sheetrockHandler: (sheetUrl: string, callback: BoardOptionCallback)
             }, {});
           }
         );
+
         callback(sheetUrl, boardOptions);
       }
     },

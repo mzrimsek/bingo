@@ -1,5 +1,5 @@
 import { BingoBoard, BingoBoardSelector } from 'components';
-import { BingoSquareData, BoardOptionCallback } from 'models';
+import { BingoSquareData } from 'models';
 import {
   Box,
   Button,
@@ -15,9 +15,9 @@ import {
   getBingoBoards,
   getBoardNameFromUrl,
   persistBingoBoard,
-  persistSelectedBingoBoard,
+  persistSelectedBingoBoardUrl,
   retrieveBingoBoard,
-  retrieveSelectedBingoBoard,
+  retrieveSelectedBingoBoardUrl,
   sheetrockHandler
 } from 'helpers';
 import { gradientButtonStyles, primary, secondary } from 'variables';
@@ -75,13 +75,13 @@ function App(): JSX.Element {
     [prefersDarkMode]
   );
 
-  const persistedSelectedBingoBoard = retrieveSelectedBingoBoard();
-  const initialSelectedBingoBoard = persistedSelectedBingoBoard ? persistedSelectedBingoBoard : '';
-  const [selectedBingoBoard, setSelectedBingoBoard] = useState(initialSelectedBingoBoard);
+  const persistedSelectedBingoBoardUrl = retrieveSelectedBingoBoardUrl();
+  const initialSelectedBingoBoardUrl = persistedSelectedBingoBoardUrl ? persistedSelectedBingoBoardUrl : '';
+  const [selectedBingoBoardUrl, setSelectedBingoBoardUrl] = useState(initialSelectedBingoBoardUrl);
 
   let initialBingoBoardRows: Array<Array<BingoSquareData>> = [];
   if (initialBingoBoardRows) {
-    const targetBoard = getBoardNameFromUrl(initialSelectedBingoBoard);
+    const targetBoard = getBoardNameFromUrl(initialSelectedBingoBoardUrl);
     if (targetBoard) {
       const persistedBoard = retrieveBingoBoard(targetBoard);
       if (persistedBoard) {
@@ -92,7 +92,6 @@ function App(): JSX.Element {
   const [bingoBoardRows, setBingoBoardRows] =
     useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
-  const bingoBoards = getBingoBoards();
 
   const updateBingoBoard: (sheetUrl: string, boardRows: Array<Array<BingoSquareData>>) => void = (
     sheetUrl,
@@ -106,14 +105,16 @@ function App(): JSX.Element {
     }
   };
 
-  const generateNewBingoBoard: BoardOptionCallback = (sheetUrl, boardOptions) => {
-    const boardRows = generateBingoBoard(boardOptions);
-    updateBingoBoard(sheetUrl, boardRows);
+  const generateNewBingoBoard = (sheetUrl) => {
+    sheetrockHandler(sheetUrl, (sheetUrl, boardOptions) => {
+      const boardRows = generateBingoBoard(boardOptions);
+      updateBingoBoard(sheetUrl, boardRows);
+    });
   };
 
   const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
-    setSelectedBingoBoard(nextSelectedBingoBoard);
-    persistSelectedBingoBoard(nextSelectedBingoBoard);
+    setSelectedBingoBoardUrl(nextSelectedBingoBoard);
+    persistSelectedBingoBoardUrl(nextSelectedBingoBoard);
 
     const targetBoard = getBoardNameFromUrl(nextSelectedBingoBoard);
     if (targetBoard) {
@@ -121,13 +122,13 @@ function App(): JSX.Element {
       if (persistedBoard) {
         setBingoBoardRows(persistedBoard);
       } else {
-        sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
+        generateNewBingoBoard(nextSelectedBingoBoard);
       }
     }
   };
 
   const handleGenerateBoardClick = () => {
-    sheetrockHandler(selectedBingoBoard, generateNewBingoBoard);
+    generateNewBingoBoard(selectedBingoBoardUrl);
   };
 
   const handleToggleSquare = (rowIndex: number, squareIndex: number) => {
@@ -146,10 +147,12 @@ function App(): JSX.Element {
       }
       return row;
     });
-    updateBingoBoard(selectedBingoBoard, updatedBingoBoardRows);
+    updateBingoBoard(selectedBingoBoardUrl, updatedBingoBoardRows);
   };
+  
+  const bingoBoards = getBingoBoards();
 
-  const generateButtonIsDisabled = selectedBingoBoard === '';
+  const generateButtonIsDisabled = selectedBingoBoardUrl === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
@@ -159,7 +162,7 @@ function App(): JSX.Element {
           <Card className={classes.header}>
             <BingoBoardSelector
               options={bingoBoards}
-              currentSelection={selectedBingoBoard}
+              currentSelection={selectedBingoBoardUrl}
               onUpdateSelection={handleUpdateSelectedBingoBoard}
             />
             <Button
