@@ -43,8 +43,8 @@ function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Pr
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel>Bingo Board</InputLabel>
-      <Select value={currentSelection} onChange={handleChange}>
+      <InputLabel color="secondary">Bingo Board</InputLabel>
+      <Select value={currentSelection} onChange={handleChange} color="secondary">
         {nodes}
       </Select>
       <FormHelperText>Select Bingo Board</FormHelperText>
