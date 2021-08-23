@@ -10,7 +10,13 @@ import {
   makeStyles,
   useMediaQuery
 } from '@material-ui/core';
-import { generateBingoBoard, getBingoBoards, sheetrockHandler } from 'helpers';
+import {
+  generateBingoBoard,
+  getBingoBoards,
+  persistBingoBoard,
+  retrieveBingoBoard,
+  sheetrockHandler
+} from 'helpers';
 import { primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
@@ -73,14 +79,39 @@ function App(): JSX.Element {
 
   const bingoBoards = getBingoBoards();
 
-  const generateNewBingoBoard: BoardOptionCallback = (boardOptions) => {
-      const boardRows = generateBingoBoard(boardOptions);
-      setBingoBoardRows(boardRows);
+  const getBoardNameFromUrl: (sheetUrl: string) => string | undefined = sheetUrl => {
+    return bingoBoards.find(board => board.url === sheetUrl)?.label;
+  };
+
+  const updateBingoBoard: (sheetUrl: string, boardRows: Array<Array<BingoSquareData>>) => void = (
+    sheetUrl,
+    boardRows
+  ) => {
+    setBingoBoardRows(boardRows);
+
+    const targetBoard = getBoardNameFromUrl(sheetUrl);
+    if (targetBoard) {
+      persistBingoBoard(targetBoard, boardRows);
+    }
+  };
+
+  const generateNewBingoBoard: BoardOptionCallback = (sheetUrl, boardOptions) => {
+    const boardRows = generateBingoBoard(boardOptions);
+    updateBingoBoard(sheetUrl, boardRows);
   };
 
   const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
     setSelectedBingoBoard(nextSelectedBingoBoard);
-    sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
+
+    const targetBoard = getBoardNameFromUrl(nextSelectedBingoBoard);
+    if (targetBoard) {
+      const persistedBoard = retrieveBingoBoard(targetBoard);
+      if (persistedBoard) {
+        setBingoBoardRows(persistedBoard);
+      } else {
+        sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
+      }
+    }
   };
 
   const handleGenerateBoardClick = () => {
@@ -103,7 +134,7 @@ function App(): JSX.Element {
       }
       return row;
     });
-    setBingoBoardRows(updatedBingoBoardRows);
+    updateBingoBoard(selectedBingoBoard, updatedBingoBoardRows);
   };
 
   const generateButtonIsDisabled = selectedBingoBoard === '';

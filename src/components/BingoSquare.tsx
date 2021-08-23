@@ -1,8 +1,8 @@
+import { Button, makeStyles } from '@material-ui/core';
 import { primary, secondary } from 'variables';
 
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
-import { Button, makeStyles } from '@material-ui/core';
 
 interface Props {
   data: BingoSquareData;

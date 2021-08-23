@@ -1,4 +1,4 @@
-export type BoardOptionCallback = (boardOptions: Array<string>) => void;
+export type BoardOptionCallback = (sheetUrl: string, boardOptions: Array<string>) => void;
 
 export interface BingoBoardOption {
   url: string;

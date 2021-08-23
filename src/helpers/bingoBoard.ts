@@ -1,6 +1,7 @@
 import { BingoBoardOption, BingoSquareData } from 'models';
 
 import env from 'react-dotenv';
+import { getRandomElement } from 'helpers';
 
 export const getBingoBoards: () => Array<BingoBoardOption> = () => {
   const urlKeys = Object.keys(env).filter(key => key.match(/GOOGLE_SHEET_URL_\d/g));
@@ -19,11 +20,6 @@ export const getBingoBoards: () => Array<BingoBoardOption> = () => {
     })
     .filter(option => option.url !== '' || option.label !== '');
 };
-
-function getRandomElement<ListType>(list: Array<ListType>): ListType {
-  const index = Math.floor(Math.random() * list.length);
-  return list.splice(index, 1)[0];
-}
 
 export const generateBingoBoard: (boardOptions: Array<string>) => Array<Array<BingoSquareData>> =
   boardOptions => {
