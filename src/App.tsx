@@ -147,6 +147,10 @@ function App(): JSX.Element {
     updateCurrentBingoBoard(selectedBingoBoardOption.label, updatedBingoBoardRows);
   };
 
+  const handleImportBoard: (boardRows: Array<Array<BingoSquareData>>) => void = boardRows => {
+    updateCurrentBingoBoard(selectedBingoBoardOption.label, boardRows);
+  };
+
   const title = selectedBingoBoardOption.label
     ? `Bingo - ${selectedBingoBoardOption.label}`
     : 'Bingo';
@@ -169,7 +173,7 @@ function App(): JSX.Element {
             />
             <div className={classes.actions}>
               <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
-              <ImportButton disabled={actionButtonIsDisabled} />
+              <ImportButton disabled={actionButtonIsDisabled} onImport={handleImportBoard} />
               <Button
                 className={classes.actionButton}
                 disabled={actionButtonIsDisabled}

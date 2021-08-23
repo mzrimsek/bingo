@@ -22,21 +22,21 @@ function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
   }));
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const stringifiedData = JSON.stringify(bingoBoardRows);
   return (
     <div>
-      <CopyToClipboard text={stringifiedData} onCopy={() => setOpen(true)}>
+      <CopyToClipboard text={stringifiedData} onCopy={() => setSnackbarOpen(true)}>
         <Button className={classes.actionButton} disabled={disabled}>
           Export Board
         </Button>
       </CopyToClipboard>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={open}
+        open={snackbarOpen}
         autoHideDuration={3000}
-        onClose={() => setOpen(false)}
+        onClose={() => setSnackbarOpen(false)}
       >
         <Alert severity="info">Copied to clipboard!</Alert>
       </Snackbar>
