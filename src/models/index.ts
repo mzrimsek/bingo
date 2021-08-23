@@ -1,4 +1,4 @@
-export type SheetrockCallback = (error, options, response) => void;
+export type BoardOptionCallback = (boardOptions: Array<string>) => void;
 
 export interface BingoBoardOption {
   url: string;

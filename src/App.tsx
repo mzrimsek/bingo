@@ -1,5 +1,5 @@
 import { BingoBoard, BingoBoardSelector } from 'components';
-import { BingoSquareData, SheetrockCallback } from 'models';
+import { BingoSquareData, BoardOptionCallback } from 'models';
 import {
   Box,
   Button,
@@ -73,24 +73,18 @@ function App(): JSX.Element {
 
   const bingoBoards = getBingoBoards();
 
-  const sheetrockCallback: SheetrockCallback = (_error, _options, response) => {
-    if (response && response.rows) {
-      const { rows } = response;
-      const rowsMinusHeader = rows.filter(row => row.num !== 0);
-
-      const boardOptions: Array<string> = rowsMinusHeader.flatMap(row => row.cellsArray);
+  const generateNewBingoBoard: BoardOptionCallback = (boardOptions) => {
       const boardRows = generateBingoBoard(boardOptions);
       setBingoBoardRows(boardRows);
-    }
   };
 
-  const updateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
+  const handleUpdateSelectedBingoBoard = (nextSelectedBingoBoard: string) => {
     setSelectedBingoBoard(nextSelectedBingoBoard);
-    sheetrockHandler(nextSelectedBingoBoard, sheetrockCallback);
+    sheetrockHandler(nextSelectedBingoBoard, generateNewBingoBoard);
   };
 
-  const generateNewBingoBoard = () => {
-    sheetrockHandler(selectedBingoBoard, sheetrockCallback);
+  const handleGenerateBoardClick = () => {
+    sheetrockHandler(selectedBingoBoard, generateNewBingoBoard);
   };
 
   const handleToggleSquare = (rowIndex: number, squareIndex: number) => {
@@ -123,12 +117,12 @@ function App(): JSX.Element {
             <BingoBoardSelector
               options={bingoBoards}
               currentSelection={selectedBingoBoard}
-              updateSelection={updateSelectedBingoBoard}
+              onUpdateSelection={handleUpdateSelectedBingoBoard}
             />
             <Button
               className={classes.generateButton}
               disabled={generateButtonIsDisabled}
-              onClick={generateNewBingoBoard}
+              onClick={handleGenerateBoardClick}
             >
               Generate New Board
             </Button>

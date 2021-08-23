@@ -13,10 +13,10 @@ import PropTypes from 'prop-types';
 interface Props {
   options: Array<BingoBoardOption>;
   currentSelection: string;
-  updateSelection: (event) => void;
+  onUpdateSelection: (nextValue) => void;
 }
 
-function BingoBoardSelector({ options, currentSelection, updateSelection }: Props): JSX.Element {
+function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Props): JSX.Element {
   const useStyles = makeStyles(() => ({
     formControl: {
       minWidth: 120
@@ -24,7 +24,7 @@ function BingoBoardSelector({ options, currentSelection, updateSelection }: Prop
   }));
   const classes = useStyles();
 
-  const handleChange = event => updateSelection(event.target.value);
+  const handleChange = event => onUpdateSelection(event.target.value);
 
   const nodes = options.map((option, index) => {
     return (
@@ -53,7 +53,7 @@ BingoBoardSelector.propTypes = {
     })
   ).isRequired,
   currentSelection: PropTypes.string.isRequired,
-  updateSelection: PropTypes.func.isRequired
+  onUpdateSelection: PropTypes.func.isRequired
 };
 
 export default BingoBoardSelector;
