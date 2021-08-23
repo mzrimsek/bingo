@@ -1,8 +1,8 @@
 import { Button, makeStyles } from '@material-ui/core';
-import { gradientButtonStyles } from 'variables';
 
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
+import { gradientButtonStyles } from 'variables';
 
 interface Props {
   data: BingoSquareData;

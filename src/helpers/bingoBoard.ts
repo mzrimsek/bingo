@@ -1,4 +1,4 @@
-import { BingoBoardOption, BingoSquareData } from 'models';
+import { BingoBoardOption, BingoSquareData, BoardOptionQueryResult } from 'models';
 
 import env from 'react-dotenv';
 import { getRandomElement } from 'helpers';
@@ -21,53 +21,62 @@ export const getBingoBoards: () => Array<BingoBoardOption> = () => {
     .filter(option => option.url !== '' || option.label !== '');
 };
 
-export const generateBingoBoard: (boardOptions: Array<string>) => Array<Array<BingoSquareData>> =
+const getRandomOptionText: (boardOptions: Array<BoardOptionQueryResult>) => string =
   boardOptions => {
-    const boardOptionCopy = [...boardOptions];
-    const row1 = [
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy)
-    ];
-    const row2 = [
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy)
-    ];
-    const row3 = [
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      'FREE',
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy)
-    ];
-    const row4 = [
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy)
-    ];
-    const row5 = [
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy),
-      getRandomElement(boardOptionCopy)
-    ];
-    const rows = [row1, row2, row3, row4, row5];
-
-    return rows.map(row => {
-      return row.map(boardOption => ({
-        display: boardOption,
-        toggled: false
-      }));
-    });
+    const option = getRandomElement(boardOptions);
+    const keys = Object.keys(option);
+    const key = getRandomElement(keys);
+    return option[key];
   };
+
+export const generateBingoBoard: (
+  boardOptions: Array<BoardOptionQueryResult>
+) => Array<Array<BingoSquareData>> = boardOptions => {
+  const boardOptionCopy = [...boardOptions];
+  const row1: Array<string> = [
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy)
+  ];
+  const row2: Array<string> = [
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy)
+  ];
+  const row3: Array<string> = [
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    'FREE',
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy)
+  ];
+  const row4: Array<string> = [
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy)
+  ];
+  const row5: Array<string> = [
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy),
+    getRandomOptionText(boardOptionCopy)
+  ];
+  const rows = [row1, row2, row3, row4, row5];
+
+  return rows.map(row => {
+    return row.map(boardOption => ({
+      display: boardOption,
+      toggled: false
+    }));
+  });
+};
 
 export const getBoardNameFromUrl: (sheetUrl: string) => string | undefined = sheetUrl => {
   return getBingoBoards().find(board => board.url === sheetUrl)?.label;
