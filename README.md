@@ -25,3 +25,8 @@ GOOGLE_SHEET_LABEL_1=Sheet Label
 | Option 3 | V1 Option 3 |             |             |
 | Option 4 |             |             |             |
 | Option 5 | V1 Option 5 | V2 Option 5 |             |
+
+## Notes
+
+- You can specify the initial board to load with an optional `board` query string.  
+  Ex: `localhost:3000?board=test` - will load the test board on initial load
