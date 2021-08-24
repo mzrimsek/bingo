@@ -4,17 +4,17 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Snackbar,
   TextareaAutosize,
   Typography,
-  makeStyles,
-  Snackbar
+  makeStyles
 } from '@material-ui/core';
 
+import { Alert } from '@material-ui/lab';
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
 import { gradientButtonStyles } from 'variables';
 import { useState } from 'react';
-import { Alert } from '@material-ui/lab';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;
@@ -78,8 +78,8 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
           if (typeof square.toggled !== 'boolean') {
             throw 'Invalid square toggled value';
           }
-        })
-      })
+        });
+      });
 
       onImport(serializedImportContent);
       handleDialogClose();

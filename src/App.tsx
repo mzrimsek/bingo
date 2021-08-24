@@ -13,11 +13,12 @@ import {
 import {
   generateBingoBoard,
   getBingoBoards,
+  getInitialBingoBoardRows,
+  getInitialSelectedBingoBoardOption,
   persistBingoBoard,
   persistSelectedBingoBoardName,
   querySheetrock,
-  retrieveBingoBoard,
-  retrieveSelectedBingoBoardOption
+  retrieveBingoBoard
 } from 'helpers';
 import { gradientButtonStyles, primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
@@ -80,18 +81,12 @@ function App(): JSX.Element {
     [prefersDarkMode]
   );
 
-  const initialSelectedBingoBoardOption = retrieveSelectedBingoBoardOption();
+  const initialSelectedBingoBoardOption = getInitialSelectedBingoBoardOption();
   const [selectedBingoBoardOption, setSelectedBingoBoardOption] = useState<BingoBoardOption>(
     initialSelectedBingoBoardOption
   );
 
-  let initialBingoBoardRows: Array<Array<BingoSquareData>> = [];
-  if (initialBingoBoardRows) {
-    const persistedBoard = retrieveBingoBoard(initialSelectedBingoBoardOption.label);
-    if (persistedBoard) {
-      initialBingoBoardRows = persistedBoard;
-    }
-  }
+  const initialBingoBoardRows = getInitialBingoBoardRows(initialSelectedBingoBoardOption.label);
   const [bingoBoardRows, setBingoBoardRows] =
     useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
