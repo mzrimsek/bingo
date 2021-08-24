@@ -4,7 +4,7 @@ A simple bingo app that uses Google sheets to back its data.
 
 ## Environment Format
 
-At least one pairing is required. Up to 10 are supported. All sheets used much be publicly available to view.
+At least one pairing is required. Up to 10 are supported. All sheets used must be publicly available to view.
 
 ```
 GOOGLE_SHEET_URL_1=https://docs.google.com/spreadsheets/d/.../edit#gid=0
