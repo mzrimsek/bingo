@@ -4,6 +4,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Snackbar,
   TextareaAutosize,
   Typography,
@@ -12,6 +15,7 @@ import {
 import { Fragment, useState } from 'react';
 
 import { Alert } from '@material-ui/lab';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
 
@@ -95,9 +99,12 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
 
   return (
     <Fragment>
-      <Button onClick={() => setDialogOpen(true)} disabled={disabled}>
-        Import Board
-      </Button>
+      <ListItem button component="a" onClick={() => setDialogOpen(true)} disabled={disabled}>
+        <ListItemIcon>
+          <AssignmentOutlinedIcon />
+        </ListItemIcon>
+        <ListItemText primary="Import Board" />
+      </ListItem>
       <Dialog onClose={handleDialogClose} open={dialogOpen} fullWidth>
         <DialogTitle>Import Board</DialogTitle>
         <DialogContent>

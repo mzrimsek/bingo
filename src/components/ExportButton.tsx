@@ -1,9 +1,10 @@
-import { Button, Snackbar } from '@material-ui/core';
 import { Fragment, useState } from 'react';
+import { ListItem, ListItemIcon, ListItemText, Snackbar } from '@material-ui/core';
 
 import { Alert } from '@material-ui/lab';
 import { BingoSquareData } from 'models';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import PropTypes from 'prop-types';
 
 interface Props {
@@ -18,7 +19,12 @@ function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
   return (
     <Fragment>
       <CopyToClipboard text={stringifiedData} onCopy={() => setSnackbarOpen(true)}>
-        <Button disabled={disabled}>Export Board</Button>
+        <ListItem button component="a" disabled={disabled}>
+          <ListItemIcon>
+            <FileCopyOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText primary="Export Board" />
+        </ListItem>
       </CopyToClipboard>
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

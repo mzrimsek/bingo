@@ -20,7 +20,7 @@ function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
     square: {
       height: '100%',
       width: '20%',
-      padding: theme.spacing(1),
+      padding: theme.spacing(1)
     }
   }));
   const classes = useStyles();

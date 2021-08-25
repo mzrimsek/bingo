@@ -1,6 +1,15 @@
-import { AppBar, Button, IconButton, Toolbar, makeStyles } from '@material-ui/core';
+import {
+  AppBar,
+  Button,
+  IconButton,
+  List,
+  SwipeableDrawer,
+  Toolbar,
+  makeStyles
+} from '@material-ui/core';
 import { BingoBoardOption, BingoSquareData } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';
+import { Fragment, useState } from 'react';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
@@ -24,33 +33,49 @@ function Header({
   const useStyles = makeStyles(() => ({
     actions: {
       display: 'flex'
+    },
+    actionList: {
+      minWidth: 250
     }
   }));
   const classes = useStyles();
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const bingoBoards = getBingoBoards();
   const actionButtonIsDisabled = currentBingoBoardSelection.label === '';
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" color="inherit">
-          <MenuIcon />
-        </IconButton>
-        <BingoBoardSelector
-          options={bingoBoards}
-          currentSelection={currentBingoBoardSelection.url}
-          onUpdateSelection={onUpdateBingoBoardSelection}
-        />
-        <div className={classes.actions}>
+    <Fragment>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={() => setDrawerOpen(true)}>
+            <MenuIcon />
+          </IconButton>
+          <BingoBoardSelector
+            options={bingoBoards}
+            currentSelection={currentBingoBoardSelection.url}
+            onUpdateSelection={onUpdateBingoBoardSelection}
+          />
+          <div className={classes.actions}>
+            <Button disabled={actionButtonIsDisabled} onClick={onGenerateBoard}>
+              Generate New Board
+            </Button>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <SwipeableDrawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onOpen={() => setDrawerOpen(true)}
+      >
+        <List component="nav" className={classes.actionList}>
           <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
           <ImportButton disabled={actionButtonIsDisabled} onImport={onBoardImport} />
-          <Button disabled={actionButtonIsDisabled} onClick={onGenerateBoard}>
-            Generate New Board
-          </Button>
-        </div>
-      </Toolbar>
-    </AppBar>
+        </List>
+      </SwipeableDrawer>
+    </Fragment>
   );
 }
 
