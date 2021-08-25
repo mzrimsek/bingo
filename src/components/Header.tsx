@@ -68,6 +68,9 @@ function Header({
     setDrawerOpen(false);
   };
 
+  const openDrawer = () => setDrawerOpen(true);
+  const closeDrawer = () => setDrawerOpen(false);
+
   const bingoBoards = getBingoBoards();
   const actionButtonIsDisabled = currentBingoBoardSelection.label === '';
 
@@ -75,7 +78,7 @@ function Header({
     <Fragment>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={() => setDrawerOpen(true)}>
+          <IconButton edge="start" color="inherit" onClick={openDrawer}>
             <MenuIcon />
           </IconButton>
           <div className={classes.actions}>
@@ -93,8 +96,8 @@ function Header({
       <SwipeableDrawer
         anchor="left"
         open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        onOpen={() => setDrawerOpen(true)}
+        onClose={closeDrawer}
+        onOpen={openDrawer}
       >
         <div className={classes.drawer}>
           <List component="nav">
@@ -117,6 +120,7 @@ function Header({
                 component="a"
                 href="https://github.com/mzrimsek/bingo"
                 target="_blank"
+                onClick={closeDrawer}
               >
                 <ListItemIcon>
                   <GitHubIcon />
