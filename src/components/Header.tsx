@@ -93,12 +93,7 @@ function Header({
           </div>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={closeDrawer}
-        onOpen={openDrawer}
-      >
+      <SwipeableDrawer anchor="left" open={drawerOpen} onClose={closeDrawer} onOpen={openDrawer}>
         <div className={classes.drawer}>
           <List component="nav">
             <ExportButton
