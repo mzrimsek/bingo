@@ -1,15 +1,24 @@
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles, withWidth } from '@material-ui/core';
 
 import { BingoSquareData } from 'models';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
 import PropTypes from 'prop-types';
 import { gradientButtonStyles } from 'variables';
 
-interface Props {
-  data: BingoSquareData;
-}
+// could not figure out how to make the withWidth
+// PropInjector work with typed Props
+// https://stackoverflow.com/questions/54749927/typescript-compile-error-trying-to-use-material-ui-withstyles
+// interface Props {
+//   data: BingoSquareData;
+// }
 
-function BingoSquare({ data }: Props): JSX.Element {
+function BingoSquare(props): JSX.Element {
+  const data: BingoSquareData = props.data;
+  const width: Breakpoint = props.width;
+
   const { display, toggled } = data;
+
+  const isSmall = width === 'xs';
 
   const useStyles = makeStyles(() => ({
     bingoSquare: {
@@ -18,7 +27,8 @@ function BingoSquare({ data }: Props): JSX.Element {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      ...(toggled ? gradientButtonStyles : {})
+      ...(toggled ? gradientButtonStyles : {}),
+      fontSize: isSmall ? '.65rem' : '.875rem'
     }
   }));
   const classes = useStyles();
@@ -30,7 +40,8 @@ BingoSquare.propTypes = {
   data: PropTypes.exact({
     display: PropTypes.string,
     toggled: PropTypes.bool
-  }).isRequired
+  }).isRequired,
+  width: PropTypes.string.isRequired
 };
 
-export default BingoSquare;
+export default withWidth()(BingoSquare);

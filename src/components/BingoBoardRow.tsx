@@ -9,17 +9,21 @@ interface Props {
   onToggleSquare: (rowIndex: number, squareIndex: number) => void;
 }
 
+// small styles aren't perfect but they're serviable for now
 function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
   const useStyles = makeStyles(theme => ({
     row: {
       display: 'flex',
       height: '20%',
-      width: '100%'
+      width: '100%',
     },
     square: {
       height: '100%',
       width: '20%',
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
+      [theme.breakpoints.down('sm')]: {
+        width: '19%'
+      }
     }
   }));
   const classes = useStyles();
