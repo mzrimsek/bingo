@@ -9,12 +9,11 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
+import { Fragment, useState } from 'react';
 
 import { Alert } from '@material-ui/lab';
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
-import { gradientButtonStyles } from 'variables';
-import { useState } from 'react';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;
@@ -22,12 +21,7 @@ interface Props {
 }
 
 function ImportButton({ onImport, disabled }: Props): JSX.Element {
-  const useStyles = makeStyles(theme => ({
-    actionButton: {
-      padding: theme.spacing(2),
-      marginLeft: theme.spacing(2),
-      ...gradientButtonStyles
-    },
+  const useStyles = makeStyles(() => ({
     textarea: {
       width: '100%'
     }
@@ -100,12 +94,8 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
   const importIsDisabled = importContent === '';
 
   return (
-    <div>
-      <Button
-        className={classes.actionButton}
-        onClick={() => setDialogOpen(true)}
-        disabled={disabled}
-      >
+    <Fragment>
+      <Button onClick={() => setDialogOpen(true)} disabled={disabled}>
         Import Board
       </Button>
       <Dialog onClose={handleDialogClose} open={dialogOpen} fullWidth>
@@ -144,7 +134,7 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
       >
         <Alert severity="success">Board Imported!</Alert>
       </Snackbar>
-    </div>
+    </Fragment>
   );
 }
 

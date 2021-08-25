@@ -15,15 +15,12 @@ function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
     row: {
       display: 'flex',
       height: '20%',
-      width: '100%',
+      width: '100%'
     },
     square: {
       height: '100%',
       width: '20%',
       padding: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        width: '19%'
-      }
     }
   }));
   const classes = useStyles();

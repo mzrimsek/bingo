@@ -4,3 +4,4 @@ export { default as BingoSquare } from './BingoSquare';
 export { default as BingoBoardRow } from './BingoBoardRow';
 export { default as ExportButton } from './ExportButton';
 export { default as ImportButton } from './ImportButton';
+export { default as Header } from './Header';

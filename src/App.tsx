@@ -1,9 +1,7 @@
-import { BingoBoard, BingoBoardSelector, ExportButton, ImportButton } from 'components';
+import { BingoBoard, Header } from 'components';
 import { BingoBoardOption, BingoSquareData } from 'models';
 import {
   Box,
-  Button,
-  Card,
   CssBaseline,
   ThemeProvider,
   createTheme,
@@ -12,7 +10,6 @@ import {
 } from '@material-ui/core';
 import {
   generateBingoBoard,
-  getBingoBoards,
   getInitialBingoBoardRows,
   getInitialSelectedBingoBoardOption,
   persistBingoBoard,
@@ -20,7 +17,7 @@ import {
   querySheetrock,
   retrieveBingoBoard
 } from 'helpers';
-import { gradientButtonStyles, primary, secondary } from 'variables';
+import { primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
 import { useTitle } from 'react-use';
@@ -28,32 +25,20 @@ import { useTitle } from 'react-use';
 function App(): JSX.Element {
   const useStyles = makeStyles(theme => ({
     wrapper: {
-      padding: theme.spacing(2),
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh'
-    },
-    header: {
-      padding: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: `70px 16px 1fr`,
+      height: '100vh',
       width: '100%'
     },
-    board: {
-      padding: theme.spacing(1),
-      width: '100%',
-      flexGrow: 1
+    headerContainer: {
+      gridColumn: 1,
+      gridRow: 1
     },
-    actions: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    actionButton: {
-      padding: theme.spacing(2),
-      marginLeft: theme.spacing(2),
-      ...gradientButtonStyles
+    boardContainer: {
+      gridColumn: 1,
+      gridRow: 3,
+      margin: theme.spacing(2)
     }
   }));
   const classes = useStyles();
@@ -151,38 +136,26 @@ function App(): JSX.Element {
     : 'Bingo';
   useTitle(title);
 
-  const bingoBoards = getBingoBoards();
-
-  const actionButtonIsDisabled = selectedBingoBoardOption.label === '';
   const shouldRenderBingoBoard = bingoBoardRows.length === 5;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <Box className={classes.wrapper}>
-          <Card className={classes.header}>
-            <BingoBoardSelector
-              options={bingoBoards}
-              currentSelection={selectedBingoBoardOption.url}
-              onUpdateSelection={handleUpdateSelectedBingoBoardOption}
+          <div className={classes.headerContainer}>
+            <Header
+              currentBingoBoardSelection={selectedBingoBoardOption}
+              onUpdateBingoBoardSelection={handleUpdateSelectedBingoBoardOption}
+              bingoBoardRows={bingoBoardRows}
+              onBoardImport={handleImportBoard}
+              onGenerateBoard={handleGenerateBoardClick}
             />
-            <div className={classes.actions}>
-              <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
-              <ImportButton disabled={actionButtonIsDisabled} onImport={handleImportBoard} />
-              <Button
-                className={classes.actionButton}
-                disabled={actionButtonIsDisabled}
-                onClick={handleGenerateBoardClick}
-              >
-                Generate New Board
-              </Button>
-            </div>
-          </Card>
-          {shouldRenderBingoBoard && (
-            <Card className={classes.board}>
+          </div>
+          <div className={classes.boardContainer}>
+            {shouldRenderBingoBoard && (
               <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />
-            </Card>
-          )}
+            )}
+          </div>
         </Box>
       </CssBaseline>
     </ThemeProvider>
