@@ -14,17 +14,14 @@ interface Props {
 
 function ExportButton({ bingoBoardRows, disabled, displaySnackbar }: Props): JSX.Element {
   const handleExportClick = () => {
-    displaySnackbar('info', 'Copied to clipboard!')
+    displaySnackbar('info', 'Copied to clipboard!');
   };
 
   const stringifiedData = JSON.stringify(bingoBoardRows);
 
   return (
     <Fragment>
-      <CopyToClipboard
-        text={stringifiedData}
-        onCopy={handleExportClick}
-      >
+      <CopyToClipboard text={stringifiedData} onCopy={handleExportClick}>
         <ListItem button component="a" disabled={disabled}>
           <ListItemIcon>
             <FileCopyOutlinedIcon />

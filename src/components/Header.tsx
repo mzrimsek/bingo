@@ -1,8 +1,12 @@
 import {
   AppBar,
   Button,
+  Divider,
   IconButton,
   List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   SwipeableDrawer,
   Toolbar,
   makeStyles
@@ -11,6 +15,7 @@ import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';
 import { Fragment, useState } from 'react';
 
+import GitHubIcon from '@material-ui/icons/GitHub';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import { getBingoBoards } from 'helpers';
@@ -43,7 +48,11 @@ function Header({
         marginLeft: theme.spacing(8)
       }
     },
-    actionList: {
+    drawer: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      justifyContent: 'space-between',
       minWidth: 250
     }
   }));
@@ -87,18 +96,36 @@ function Header({
         onClose={() => setDrawerOpen(false)}
         onOpen={() => setDrawerOpen(true)}
       >
-        <List component="nav" className={classes.actionList}>
-          <ExportButton
-            bingoBoardRows={bingoBoardRows}
-            disabled={actionButtonIsDisabled}
-            displaySnackbar={closeDrawerAfterSnackbar}
-          />
-          <ImportButton
-            disabled={actionButtonIsDisabled}
-            onImport={onBoardImport}
-            displaySnackbar={closeDrawerAfterSnackbar}
-          />
-        </List>
+        <div className={classes.drawer}>
+          <List component="nav">
+            <ExportButton
+              bingoBoardRows={bingoBoardRows}
+              disabled={actionButtonIsDisabled}
+              displaySnackbar={closeDrawerAfterSnackbar}
+            />
+            <ImportButton
+              disabled={actionButtonIsDisabled}
+              onImport={onBoardImport}
+              displaySnackbar={closeDrawerAfterSnackbar}
+            />
+          </List>
+          <div>
+            <Divider />
+            <List component="nav">
+              <ListItem
+                button
+                component="a"
+                href="https://github.com/mzrimsek/bingo"
+                target="_blank"
+              >
+                <ListItemIcon>
+                  <GitHubIcon />
+                </ListItemIcon>
+                <ListItemText primary="View Source" />
+              </ListItem>
+            </List>
+          </div>
+        </div>
       </SwipeableDrawer>
     </Fragment>
   );
