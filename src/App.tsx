@@ -1,8 +1,10 @@
+import { Alert, Color } from '@material-ui/lab';
 import { BingoBoard, Header } from 'components';
-import { BingoBoardOption, BingoSquareData } from 'models';
+import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import {
   Box,
   CssBaseline,
+  Snackbar,
   ThemeProvider,
   createTheme,
   makeStyles,
@@ -74,6 +76,19 @@ function App(): JSX.Element {
   const initialBingoBoardRows = getInitialBingoBoardRows(initialSelectedBingoBoardOption.label);
   const [bingoBoardRows, setBingoBoardRows] =
     useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<Color | undefined>(undefined);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const displaySnackbar: (severity: SnackbarSeverity, message: string) => void = (
+    severity,
+    message
+  ) => {
+    setSnackbarSeverity(severity);
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
 
   const updateCurrentBingoBoard: (
     boardName: string,
@@ -149,6 +164,7 @@ function App(): JSX.Element {
               bingoBoardRows={bingoBoardRows}
               onBoardImport={handleImportBoard}
               onGenerateBoard={handleGenerateBoardClick}
+              displaySnackbar={displaySnackbar}
             />
           </div>
           <div className={classes.boardContainer}>
@@ -156,6 +172,14 @@ function App(): JSX.Element {
               <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />
             )}
           </div>
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+          </Snackbar>
         </Box>
       </CssBaseline>
     </ThemeProvider>
