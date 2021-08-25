@@ -1,7 +1,8 @@
+import { Card, makeStyles } from '@material-ui/core';
+
 import { BingoBoardRow } from 'components';
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
 
 interface Props {
   rows: Array<Array<BingoSquareData>>;
@@ -24,7 +25,7 @@ function BingoBoard({ rows, onToggleSquare }: Props): JSX.Element {
     <BingoBoardRow key={index} row={row} rowIndex={index} onToggleSquare={onToggleSquare} />
   ));
 
-  return <div className={classes.container}>{boardRows}</div>;
+  return <Card className={classes.container}>{boardRows}</Card>;
 }
 
 BingoBoard.propTypes = {

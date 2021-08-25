@@ -4,17 +4,20 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Snackbar,
   TextareaAutosize,
   Typography,
   makeStyles
 } from '@material-ui/core';
+import { Fragment, useState } from 'react';
 
 import { Alert } from '@material-ui/lab';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
-import { gradientButtonStyles } from 'variables';
-import { useState } from 'react';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;
@@ -22,12 +25,7 @@ interface Props {
 }
 
 function ImportButton({ onImport, disabled }: Props): JSX.Element {
-  const useStyles = makeStyles(theme => ({
-    actionButton: {
-      padding: theme.spacing(2),
-      marginLeft: theme.spacing(2),
-      ...gradientButtonStyles
-    },
+  const useStyles = makeStyles(() => ({
     textarea: {
       width: '100%'
     }
@@ -100,14 +98,13 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
   const importIsDisabled = importContent === '';
 
   return (
-    <div>
-      <Button
-        className={classes.actionButton}
-        onClick={() => setDialogOpen(true)}
-        disabled={disabled}
-      >
-        Import Board
-      </Button>
+    <Fragment>
+      <ListItem button component="a" onClick={() => setDialogOpen(true)} disabled={disabled}>
+        <ListItemIcon>
+          <AssignmentOutlinedIcon />
+        </ListItemIcon>
+        <ListItemText primary="Import Board" />
+      </ListItem>
       <Dialog onClose={handleDialogClose} open={dialogOpen} fullWidth>
         <DialogTitle>Import Board</DialogTitle>
         <DialogContent>
@@ -129,7 +126,7 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
         </DialogActions>
       </Dialog>
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={errorSnackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
@@ -137,14 +134,14 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
         <Alert severity="error">{errorMessage}!</Alert>
       </Snackbar>
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={successSnackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
       >
         <Alert severity="success">Board Imported!</Alert>
       </Snackbar>
-    </div>
+    </Fragment>
   );
 }
 
