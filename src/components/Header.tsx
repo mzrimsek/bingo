@@ -30,9 +30,16 @@ function Header({
   onBoardImport,
   onGenerateBoard
 }: Props): JSX.Element {
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles(theme => ({
     actions: {
-      display: 'flex'
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: theme.spacing(1),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(8)
+      }
     },
     actionList: {
       minWidth: 250
@@ -52,12 +59,12 @@ function Header({
           <IconButton edge="start" color="inherit" onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
-          <BingoBoardSelector
-            options={bingoBoards}
-            currentSelection={currentBingoBoardSelection.url}
-            onUpdateSelection={onUpdateBingoBoardSelection}
-          />
           <div className={classes.actions}>
+            <BingoBoardSelector
+              options={bingoBoards}
+              currentSelection={currentBingoBoardSelection.url}
+              onUpdateSelection={onUpdateBingoBoardSelection}
+            />
             <Button disabled={actionButtonIsDisabled} onClick={onGenerateBoard}>
               Generate New Board
             </Button>

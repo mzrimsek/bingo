@@ -27,7 +27,7 @@ function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
         </ListItem>
       </CopyToClipboard>
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}

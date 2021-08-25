@@ -38,7 +38,7 @@ function App(): JSX.Element {
     boardContainer: {
       gridColumn: 1,
       gridRow: 3,
-      margin: theme.spacing(2)
+      margin: theme.spacing(1)
     }
   }));
   const classes = useStyles();

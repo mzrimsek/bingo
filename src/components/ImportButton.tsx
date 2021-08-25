@@ -126,7 +126,7 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
         </DialogActions>
       </Dialog>
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={errorSnackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
@@ -134,7 +134,7 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
         <Alert severity="error">{errorMessage}!</Alert>
       </Snackbar>
       <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={successSnackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
