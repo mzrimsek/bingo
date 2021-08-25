@@ -1,3 +1,4 @@
+import { BingoSquareData, SnackbarSeverity } from 'models';
 import {
   Button,
   Dialog,
@@ -7,24 +8,22 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Snackbar,
   TextareaAutosize,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import { Fragment, useState } from 'react';
 
-import { Alert } from '@material-ui/lab';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
-import { BingoSquareData } from 'models';
 import PropTypes from 'prop-types';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;
   disabled: boolean;
+  displaySnackbar: (severity: SnackbarSeverity, message: string) => void;
 }
 
-function ImportButton({ onImport, disabled }: Props): JSX.Element {
+function ImportButton({ onImport, disabled, displaySnackbar }: Props): JSX.Element {
   const useStyles = makeStyles(() => ({
     textarea: {
       width: '100%'
@@ -33,9 +32,6 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
   const classes = useStyles();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
-  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [importContent, setImportContent] = useState('');
 
   const handleDialogClose = () => {
@@ -80,19 +76,13 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
       });
 
       onImport(serializedImportContent);
-      handleDialogClose();
-      setSuccessSnackbarOpen(true);
+      displaySnackbar('success', 'Board Imported!');
     } catch (error) {
       const message = typeof error === 'string' ? error : 'Unable to parse import';
-      setErrorMessage(message);
-      setErrorSnackbarOpen(true);
+      displaySnackbar('error', message);
+    } finally {
       handleDialogClose();
     }
-  };
-
-  const handleSnackbarClose = () => {
-    setSuccessSnackbarOpen(false);
-    setErrorSnackbarOpen(false);
   };
 
   const importIsDisabled = importContent === '';
@@ -125,29 +115,14 @@ function ImportButton({ onImport, disabled }: Props): JSX.Element {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={errorSnackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert severity="error">{errorMessage}!</Alert>
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={successSnackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-      >
-        <Alert severity="success">Board Imported!</Alert>
-      </Snackbar>
     </Fragment>
   );
 }
 
 ImportButton.propTypes = {
   onImport: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired
+  disabled: PropTypes.bool.isRequired,
+  displaySnackbar: PropTypes.func.isRequired
 };
 
 export default ImportButton;

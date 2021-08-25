@@ -1,24 +1,30 @@
-import { Fragment, useState } from 'react';
-import { ListItem, ListItemIcon, ListItemText, Snackbar } from '@material-ui/core';
+import { BingoSquareData, SnackbarSeverity } from 'models';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 
-import { Alert } from '@material-ui/lab';
-import { BingoSquareData } from 'models';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 interface Props {
   bingoBoardRows: Array<Array<BingoSquareData>>;
   disabled: boolean;
+  displaySnackbar: (severity: SnackbarSeverity, message: string) => void;
 }
 
-function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+function ExportButton({ bingoBoardRows, disabled, displaySnackbar }: Props): JSX.Element {
+  const handleExportClick = () => {
+    displaySnackbar('info', 'Copied to clipboard!')
+  };
 
   const stringifiedData = JSON.stringify(bingoBoardRows);
+
   return (
     <Fragment>
-      <CopyToClipboard text={stringifiedData} onCopy={() => setSnackbarOpen(true)}>
+      <CopyToClipboard
+        text={stringifiedData}
+        onCopy={handleExportClick}
+      >
         <ListItem button component="a" disabled={disabled}>
           <ListItemIcon>
             <FileCopyOutlinedIcon />
@@ -26,14 +32,6 @@ function ExportButton({ bingoBoardRows, disabled }: Props): JSX.Element {
           <ListItemText primary="Export Board" />
         </ListItem>
       </CopyToClipboard>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert severity="info">Copied to clipboard!</Alert>
-      </Snackbar>
     </Fragment>
   );
 }
@@ -47,7 +45,8 @@ ExportButton.propTypes = {
       })
     )
   ).isRequired,
-  disabled: PropTypes.bool.isRequired
+  disabled: PropTypes.bool.isRequired,
+  displaySnackbar: PropTypes.func.isRequired
 };
 
 export default ExportButton;

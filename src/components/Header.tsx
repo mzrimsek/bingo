@@ -7,7 +7,7 @@ import {
   Toolbar,
   makeStyles
 } from '@material-ui/core';
-import { BingoBoardOption, BingoSquareData } from 'models';
+import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';
 import { Fragment, useState } from 'react';
 
@@ -21,6 +21,7 @@ interface Props {
   bingoBoardRows: Array<Array<BingoSquareData>>;
   onBoardImport: (boardRows: Array<Array<BingoSquareData>>) => void;
   onGenerateBoard: () => void;
+  displaySnackbar: (severity: SnackbarSeverity, message: string) => void;
 }
 
 function Header({
@@ -28,7 +29,8 @@ function Header({
   onUpdateBingoBoardSelection,
   bingoBoardRows,
   onBoardImport,
-  onGenerateBoard
+  onGenerateBoard,
+  displaySnackbar
 }: Props): JSX.Element {
   const useStyles = makeStyles(theme => ({
     actions: {
@@ -48,6 +50,14 @@ function Header({
   const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const closeDrawerAfterSnackbar: (severity: SnackbarSeverity, message: string) => void = (
+    severity,
+    message
+  ) => {
+    displaySnackbar(severity, message);
+    setDrawerOpen(false);
+  };
 
   const bingoBoards = getBingoBoards();
   const actionButtonIsDisabled = currentBingoBoardSelection.label === '';
@@ -78,8 +88,16 @@ function Header({
         onOpen={() => setDrawerOpen(true)}
       >
         <List component="nav" className={classes.actionList}>
-          <ExportButton bingoBoardRows={bingoBoardRows} disabled={actionButtonIsDisabled} />
-          <ImportButton disabled={actionButtonIsDisabled} onImport={onBoardImport} />
+          <ExportButton
+            bingoBoardRows={bingoBoardRows}
+            disabled={actionButtonIsDisabled}
+            displaySnackbar={closeDrawerAfterSnackbar}
+          />
+          <ImportButton
+            disabled={actionButtonIsDisabled}
+            onImport={onBoardImport}
+            displaySnackbar={closeDrawerAfterSnackbar}
+          />
         </List>
       </SwipeableDrawer>
     </Fragment>
@@ -101,7 +119,8 @@ Header.propTypes = {
     )
   ).isRequired,
   onBoardImport: PropTypes.func.isRequired,
-  onGenerateBoard: PropTypes.func.isRequired
+  onGenerateBoard: PropTypes.func.isRequired,
+  displaySnackbar: PropTypes.func.isRequired
 };
 
 export default Header;
