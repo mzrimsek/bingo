@@ -87,7 +87,7 @@ function Header({
               currentSelection={currentBingoBoardSelection.url}
               onUpdateSelection={onUpdateBingoBoardSelection}
             />
-            <Button disabled={actionButtonIsDisabled} onClick={onGenerateBoard}>
+            <Button color="inherit" disabled={actionButtonIsDisabled} onClick={onGenerateBoard}>
               Generate New Board
             </Button>
           </div>

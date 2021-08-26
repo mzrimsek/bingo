@@ -1,11 +1,4 @@
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  makeStyles
-} from '@material-ui/core';
+import { FormControl, FormHelperText, MenuItem, Select, makeStyles } from '@material-ui/core';
 
 import { BingoBoardOption } from 'models';
 import PropTypes from 'prop-types';
@@ -19,7 +12,11 @@ interface Props {
 function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Props): JSX.Element {
   const useStyles = makeStyles(() => ({
     formControl: {
-      minWidth: 120
+      minWidth: 120,
+      color: 'white'
+    },
+    white: {
+      color: 'white'
     }
   }));
   const classes = useStyles();
@@ -43,11 +40,18 @@ function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Pr
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel color="secondary">Bingo Board</InputLabel>
-      <Select value={currentSelection} onChange={handleChange} color="secondary">
+      <Select
+        value={currentSelection}
+        onChange={handleChange}
+        displayEmpty
+        className={classes.white}
+      >
+        <MenuItem value="" disabled>
+          Board Name
+        </MenuItem>
         {nodes}
       </Select>
-      <FormHelperText>Select Bingo Board</FormHelperText>
+      <FormHelperText className={classes.white}>Select Bingo Board</FormHelperText>
     </FormControl>
   );
 }
