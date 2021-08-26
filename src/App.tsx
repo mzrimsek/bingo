@@ -6,6 +6,7 @@ import {
   CssBaseline,
   Snackbar,
   ThemeProvider,
+  Typography,
   createTheme,
   makeStyles,
   useMediaQuery
@@ -41,6 +42,10 @@ function App(): JSX.Element {
       gridColumn: 1,
       gridRow: 3,
       margin: theme.spacing(1)
+    },
+    placeholder: {
+      display: 'flex',
+      justifyContent: 'center'
     }
   }));
   const classes = useStyles();
@@ -151,7 +156,13 @@ function App(): JSX.Element {
     : 'Bingo';
   useTitle(title);
 
-  const shouldRenderBingoBoard = bingoBoardRows.length === 5;
+  const renderMainContent: () => JSX.Element = () => {
+    const shouldRenderBingoBoard = bingoBoardRows.length === 5;
+    if (shouldRenderBingoBoard) {
+      return <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />;
+    }
+    return <Typography variant="h5" className={classes.placeholder}>Select a board to get started!</Typography>;
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -167,11 +178,7 @@ function App(): JSX.Element {
               displaySnackbar={displaySnackbar}
             />
           </div>
-          <div className={classes.boardContainer}>
-            {shouldRenderBingoBoard && (
-              <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />
-            )}
-          </div>
+          <div className={classes.boardContainer}>{renderMainContent()}</div>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             open={snackbarOpen}
