@@ -57,16 +57,10 @@ function App(): JSX.Element {
         palette: {
           type: prefersDarkMode ? 'dark' : 'light',
           primary: {
-            light: primary.light,
-            main: primary.main,
-            dark: primary.dark,
-            contrastText: primary.contrastText
+            main: primary.main
           },
           secondary: {
-            light: secondary.light,
-            main: secondary.main,
-            dark: secondary.dark,
-            contrastText: secondary.contrastText
+            main: secondary.main
           }
         }
       }),
