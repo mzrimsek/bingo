@@ -1,10 +1,10 @@
-FROM node:latest as build
+FROM node:17.9.0 as build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm ci --silent
-RUN npm install react-scripts@4.0.3 -g --silent
+RUN npm install react-scripts@5.0.1 -g --silent
 COPY . ./
 RUN npm run build
 

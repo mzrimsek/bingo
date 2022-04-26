@@ -11,11 +11,10 @@ import {
   TextareaAutosize,
   Typography,
   makeStyles
-} from '@material-ui/core';
+} from '@mui/material';
 import { Fragment, useState } from 'react';
 
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
-import PropTypes from 'prop-types';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;
@@ -118,11 +117,5 @@ function ImportButton({ onImport, disabled, displaySnackbar }: Props): JSX.Eleme
     </Fragment>
   );
 }
-
-ImportButton.propTypes = {
-  onImport: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  displaySnackbar: PropTypes.func.isRequired
-};
 
 export default ImportButton;

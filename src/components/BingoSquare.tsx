@@ -1,8 +1,6 @@
-import { Button, makeStyles, withWidth } from '@material-ui/core';
+import { Breakpoint, Button } from '@mui/material';
 
 import { BingoSquareData } from 'models';
-import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
-import PropTypes from 'prop-types';
 import { gradientButtonStyles } from 'variables';
 
 // could not figure out how to make the withWidth
@@ -35,13 +33,5 @@ function BingoSquare(props): JSX.Element {
 
   return <Button className={classes.bingoSquare}>{display}</Button>;
 }
-
-BingoSquare.propTypes = {
-  data: PropTypes.exact({
-    display: PropTypes.string,
-    toggled: PropTypes.bool
-  }).isRequired,
-  width: PropTypes.string.isRequired
-};
 
 export default withWidth()(BingoSquare);

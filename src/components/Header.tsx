@@ -10,14 +10,13 @@ import {
   SwipeableDrawer,
   Toolbar,
   makeStyles
-} from '@material-ui/core';
+} from '@mui/material';
 import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';
 import { Fragment, useState } from 'react';
 
-import GitHubIcon from '@material-ui/icons/GitHub';
-import MenuIcon from '@material-ui/icons/Menu';
-import PropTypes from 'prop-types';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import MenuIcon from '@mui/icons-material/Menu';
 import { getBingoBoards } from 'helpers';
 
 interface Props {
@@ -129,24 +128,5 @@ function Header({
     </Fragment>
   );
 }
-
-Header.propTypes = {
-  currentBingoBoardSelection: PropTypes.exact({
-    url: PropTypes.string,
-    label: PropTypes.string
-  }).isRequired,
-  onUpdateBingoBoardSelection: PropTypes.func.isRequired,
-  bingoBoardRows: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        display: PropTypes.string,
-        toggled: PropTypes.bool
-      })
-    )
-  ).isRequired,
-  onBoardImport: PropTypes.func.isRequired,
-  onGenerateBoard: PropTypes.func.isRequired,
-  displaySnackbar: PropTypes.func.isRequired
-};
 
 export default Header;

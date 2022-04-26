@@ -1,5 +1,3 @@
-import { Color } from '@material-ui/lab';
-
 export interface BoardOptionQueryResult {
   main: string;
   variant1?: string;
@@ -22,4 +20,4 @@ export interface BingoSquareData {
   toggled: boolean;
 }
 
-export type SnackbarSeverity = Color | undefined;
+export type SnackbarSeverity = 'error' | 'warning' | 'info' | 'success' | undefined;

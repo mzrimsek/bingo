@@ -1,7 +1,6 @@
-import { FormControl, FormHelperText, MenuItem, Select, makeStyles } from '@material-ui/core';
+import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
 
 import { BingoBoardOption } from 'models';
-import PropTypes from 'prop-types';
 
 interface Props {
   options: Array<BingoBoardOption>;
@@ -55,16 +54,5 @@ function BingoBoardSelector({ options, currentSelection, onUpdateSelection }: Pr
     </FormControl>
   );
 }
-
-BingoBoardSelector.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.exact({
-      url: PropTypes.string,
-      label: PropTypes.string
-    })
-  ).isRequired,
-  currentSelection: PropTypes.string.isRequired,
-  onUpdateSelection: PropTypes.func.isRequired
-};
 
 export default BingoBoardSelector;

@@ -1,16 +1,14 @@
-import { Alert, Color } from '@material-ui/lab';
-import { BingoBoard, Header } from 'components';
-import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import {
+  Alert,
   Box,
   CssBaseline,
   Snackbar,
   ThemeProvider,
   Typography,
-  createTheme,
-  makeStyles,
   useMediaQuery
-} from '@material-ui/core';
+} from '@mui/material';
+import { BingoBoard, Header } from 'components';
+import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import {
   generateBingoBoard,
   getInitialBingoBoardRows,
@@ -77,7 +75,7 @@ function App(): JSX.Element {
     useState<Array<Array<BingoSquareData>>>(initialBingoBoardRows);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState<Color | undefined>(undefined);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>(undefined);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const displaySnackbar: (severity: SnackbarSeverity, message: string) => void = (
@@ -155,7 +153,11 @@ function App(): JSX.Element {
     if (shouldRenderBingoBoard) {
       return <BingoBoard rows={bingoBoardRows} onToggleSquare={handleToggleSquare} />;
     }
-    return <Typography variant="h5" className={classes.placeholder}>Select a board to get started!</Typography>;
+    return (
+      <Typography variant="h5" className={classes.placeholder}>
+        Select a board to get started!
+      </Typography>
+    );
   };
 
   return (

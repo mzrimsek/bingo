@@ -1,7 +1,5 @@
 import { BingoSquare } from 'components';
 import { BingoSquareData } from 'models';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
 
 interface Props {
   row: Array<BingoSquareData>;
@@ -34,16 +32,5 @@ function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
   });
   return <div className={classes.row}>{squares}</div>;
 }
-
-BingoBoardRow.propTypes = {
-  row: PropTypes.arrayOf(
-    PropTypes.exact({
-      display: PropTypes.string,
-      toggled: PropTypes.bool
-    })
-  ).isRequired,
-  rowIndex: PropTypes.number.isRequired,
-  onToggleSquare: PropTypes.func.isRequired
-};
 
 export default BingoBoardRow;

@@ -1,10 +1,9 @@
 import { BingoSquareData, SnackbarSeverity } from 'models';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import { Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 interface Props {
   bingoBoardRows: Array<Array<BingoSquareData>>;
@@ -32,18 +31,5 @@ function ExportButton({ bingoBoardRows, disabled, displaySnackbar }: Props): JSX
     </Fragment>
   );
 }
-
-ExportButton.propTypes = {
-  bingoBoardRows: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        display: PropTypes.string,
-        toggled: PropTypes.bool
-      })
-    )
-  ).isRequired,
-  disabled: PropTypes.bool.isRequired,
-  displaySnackbar: PropTypes.func.isRequired
-};
 
 export default ExportButton;

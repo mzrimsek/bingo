@@ -1,8 +1,6 @@
-import { Card, makeStyles } from '@material-ui/core';
-
 import { BingoBoardRow } from 'components';
 import { BingoSquareData } from 'models';
-import PropTypes from 'prop-types';
+import { Card } from '@mui/material';
 
 interface Props {
   rows: Array<Array<BingoSquareData>>;
@@ -27,17 +25,5 @@ function BingoBoard({ rows, onToggleSquare }: Props): JSX.Element {
 
   return <Card className={classes.container}>{boardRows}</Card>;
 }
-
-BingoBoard.propTypes = {
-  rows: PropTypes.arrayOf(
-    PropTypes.arrayOf(
-      PropTypes.exact({
-        display: PropTypes.string,
-        toggled: PropTypes.bool
-      })
-    )
-  ).isRequired,
-  onToggleSquare: PropTypes.func.isRequired
-};
 
 export default BingoBoard;
