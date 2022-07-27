@@ -1,4 +1,4 @@
-import { Breakpoint, Theme, useMediaQuery, useTheme } from "@mui/material";
+import { Breakpoint, Theme, useMediaQuery, useTheme } from '@mui/material';
 
 type BreakpointOrNull = Breakpoint | null;
 
@@ -7,7 +7,7 @@ type BreakpointOrNull = Breakpoint | null;
  * breakpoints in theme is static. It will break once you change the number of
  * breakpoints. See https://reactjs.org/docs/hooks-rules.html#only-call-hooks-at-the-top-level
  */
-export function useWidth() {
+export function useWidth(): Breakpoint {
   const theme: Theme = useTheme();
   const keys: readonly Breakpoint[] = [...theme.breakpoints.keys].reverse();
   return (

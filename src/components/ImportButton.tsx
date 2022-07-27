@@ -9,7 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   TextareaAutosize,
-  Typography,
+  Typography
 } from '@mui/material';
 import { Fragment, useState } from 'react';
 

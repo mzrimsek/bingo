@@ -1,7 +1,7 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BingoSquare } from 'components';
 import { BingoSquareData } from 'models';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
   row: Array<BingoSquareData>;

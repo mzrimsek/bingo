@@ -1,7 +1,7 @@
 import { FormControl, FormHelperText, MenuItem, Select } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { BingoBoardOption } from 'models';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
   options: Array<BingoBoardOption>;

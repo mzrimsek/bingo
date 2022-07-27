@@ -8,8 +8,8 @@ import {
   ListItemIcon,
   ListItemText,
   SwipeableDrawer,
-  Toolbar,
-  Theme
+  Theme,
+  Toolbar
 } from '@mui/material';
 import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';

@@ -1,12 +1,12 @@
 import {
   Alert,
   Box,
-  createTheme,
   CssBaseline,
   Snackbar,
   Theme,
   ThemeProvider,
   Typography,
+  createTheme,
   useMediaQuery
 } from '@mui/material';
 import { BingoBoard, Header } from 'components';
@@ -23,8 +23,8 @@ import {
 import { primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
-import { useTitle } from 'react-use';
 import { makeStyles } from '@mui/styles';
+import { useTitle } from 'react-use';
 
 function App(): JSX.Element {
   const useStyles = makeStyles((theme: Theme) => ({

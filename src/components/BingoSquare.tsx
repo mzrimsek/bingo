@@ -1,9 +1,8 @@
+import { BingoSquareData } from 'models';
 import { Button } from '@mui/material';
+import { gradientButtonStyles } from 'variables';
 import { makeStyles } from '@mui/styles';
 import { useWidth } from 'hooks';
-
-import { BingoSquareData } from 'models';
-import { gradientButtonStyles } from 'variables';
 
 interface Props {
   data: BingoSquareData;
@@ -32,4 +31,4 @@ function BingoSquare(props: Props): JSX.Element {
   return <Button className={classes.bingoSquare}>{display}</Button>;
 }
 
-export default (BingoSquare);
+export default BingoSquare;
