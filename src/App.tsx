@@ -1,8 +1,10 @@
 import {
   Alert,
   Box,
+  createTheme,
   CssBaseline,
   Snackbar,
+  Theme,
   ThemeProvider,
   Typography,
   useMediaQuery
@@ -22,9 +24,10 @@ import { primary, secondary } from 'variables';
 import { useMemo, useState } from 'react';
 
 import { useTitle } from 'react-use';
+import { makeStyles } from '@mui/styles';
 
 function App(): JSX.Element {
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme: Theme) => ({
     wrapper: {
       display: 'grid',
       gridTemplateColumns: '1fr',
@@ -53,7 +56,7 @@ function App(): JSX.Element {
     () =>
       createTheme({
         palette: {
-          type: prefersDarkMode ? 'dark' : 'light',
+          mode: prefersDarkMode ? 'dark' : 'light',
           primary: {
             main: primary.main
           },

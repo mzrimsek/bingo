@@ -9,7 +9,7 @@ import {
   ListItemText,
   SwipeableDrawer,
   Toolbar,
-  makeStyles
+  Theme
 } from '@mui/material';
 import { BingoBoardOption, BingoSquareData, SnackbarSeverity } from 'models';
 import { BingoBoardSelector, ExportButton, ImportButton } from 'components';
@@ -18,6 +18,7 @@ import { Fragment, useState } from 'react';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import MenuIcon from '@mui/icons-material/Menu';
 import { getBingoBoards } from 'helpers';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
   currentBingoBoardSelection: BingoBoardOption;
@@ -36,7 +37,7 @@ function Header({
   onGenerateBoard,
   displaySnackbar
 }: Props): JSX.Element {
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme: Theme) => ({
     actions: {
       display: 'flex',
       justifyContent: 'space-between',

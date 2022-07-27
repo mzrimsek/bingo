@@ -10,11 +10,11 @@ import {
   ListItemText,
   TextareaAutosize,
   Typography,
-  makeStyles
 } from '@mui/material';
 import { Fragment, useState } from 'react';
 
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
   onImport: (boardRows: Array<Array<BingoSquareData>>) => void;

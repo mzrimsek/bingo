@@ -1,6 +1,7 @@
 import { BingoBoardRow } from 'components';
 import { BingoSquareData } from 'models';
 import { Card } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 interface Props {
   rows: Array<Array<BingoSquareData>>;

@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { BingoSquare } from 'components';
 import { BingoSquareData } from 'models';
 
@@ -8,7 +10,7 @@ interface Props {
 }
 
 function BingoBoardRow({ row, rowIndex, onToggleSquare }: Props): JSX.Element {
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme: Theme) => ({
     row: {
       display: 'flex',
       height: '20%',
