@@ -1,21 +1,19 @@
-import { Breakpoint, Button } from '@mui/material';
+import { Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useWidth } from 'hooks';
 
 import { BingoSquareData } from 'models';
 import { gradientButtonStyles } from 'variables';
 
-// could not figure out how to make the withWidth
-// PropInjector work with typed Props
-// https://stackoverflow.com/questions/54749927/typescript-compile-error-trying-to-use-material-ui-withstyles
-// interface Props {
-//   data: BingoSquareData;
-// }
+interface Props {
+  data: BingoSquareData;
+}
 
-function BingoSquare(props): JSX.Element {
+function BingoSquare(props: Props): JSX.Element {
   const data: BingoSquareData = props.data;
-  const width: Breakpoint = props.width;
-
   const { display, toggled } = data;
 
+  const width = useWidth();
   const isSmall = width === 'xs';
 
   const useStyles = makeStyles(() => ({
@@ -34,4 +32,4 @@ function BingoSquare(props): JSX.Element {
   return <Button className={classes.bingoSquare}>{display}</Button>;
 }
 
-export default withWidth()(BingoSquare);
+export default (BingoSquare);
